@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sanity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Files exist
+        run: |
+          test -f index.html
+          test -f data.js
+
+      - name: data.js parses and exposes STORES
+        run: |
+          node -e '
+            global.window = {};
+            require("./data.js");
+            const s = window.STORES;
+            if (!Array.isArray(s) || s.length === 0) {
+              throw new Error("window.STORES is not a non-empty array");
+            }
+            console.log("data.js OK — " + s.length + " stores");
+          '
