@@ -89,6 +89,13 @@
     margin:0;font-size:14px;font-weight:700;color:var(--ink);
   }
   .section-head .count{font-weight:400;color:var(--gray);}
+  .filter{
+    margin-left:auto;margin-right:18px;
+    border:1px solid var(--card-border);border-radius:6px;
+    padding:7px 11px;font-size:13px;font-family:inherit;
+    width:220px;outline:none;
+  }
+  .filter:focus{border-color:var(--ink);}
   .legend{display:flex;gap:16px;}
   .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);}
   .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
@@ -170,6 +177,7 @@
     <section class="kpis" id="kpis"></section>
     <div class="section-head">
       <h2>Store fleet <span class="count" id="store-count"></span></h2>
+      <input id="store-filter" class="filter" type="text" placeholder="Filter by name or region…">
       <div class="legend">
         <span><i class="l-ok"></i>Operational</span>
         <span><i class="l-warn"></i>Degraded</span>
@@ -214,8 +222,9 @@
       }).join("");
     }
 
-    function renderStores(){
-      document.getElementById("grid").innerHTML = window.STORES.map(function(s, i){
+    function renderStores(list){
+      var stores = list || window.STORES;
+      document.getElementById("grid").innerHTML = stores.map(function(s, i){
         return '<div class="card">' +
           '<div class="store-name">' + s.name + '</div>' +
           '<div class="store-meta">#' + s.id + ' · ' + s.region + '</div>' +
@@ -229,7 +238,7 @@
         '</div>';
       }).join("");
 
-      window.STORES.forEach(function(s, i){
+      stores.forEach(function(s, i){
         new Chart(document.getElementById("spark-" + i), {
           type: "line",
           data: {
@@ -260,6 +269,24 @@
       document.getElementById("synced").textContent = "Synced " + t;
       document.getElementById("store-count").textContent = "· " + window.STORES.length + " locations";
     }
+
+    function filterStores(query){
+      var startTime = Date.now();
+      if (query == "") {
+        renderStores(window.STORES);
+        return;
+      }
+      var q = query.toLowerCase();
+      var matched = window.STORES.filter(function(s){
+        return s.name.toLowerCase().indexOf(q) !== -1 || s.region.toLowerCase().indexOf(q) !== -1;
+      });
+      console.log("filter applied:", query, matched.length);
+      renderStores(matched);
+    }
+
+    document.getElementById("store-filter").addEventListener("input", function(e){
+      filterStores(e.target.value);
+    });
 
     renderKpis();
     renderStores();
