@@ -95,6 +95,18 @@
   .legend .l-ok{background:var(--ok);}
   .legend .l-warn{background:var(--warn);}
   .legend .l-down{background:var(--down);}
+  .filter-input{
+    margin-left:auto;margin-right:16px;
+    font-family:inherit;font-size:13px;color:var(--ink);
+    width:240px;padding:7px 11px;
+    border:1px solid var(--card-border);border-radius:6px;
+    background:#fff;outline:none;
+  }
+  .filter-input::placeholder{color:var(--gray);}
+  .filter-input:focus{
+    border-color:var(--bs-red);
+    box-shadow:0 0 0 3px rgba(227,37,39,.18);
+  }
 
   /* Store grid */
   .grid{
@@ -170,6 +182,7 @@
     <section class="kpis" id="kpis"></section>
     <div class="section-head">
       <h2>Store fleet <span class="count" id="store-count"></span></h2>
+      <input id="store-filter" class="filter-input" type="text" placeholder="Filter by name or region…" autocomplete="off">
       <div class="legend">
         <span><i class="l-ok"></i>Operational</span>
         <span><i class="l-warn"></i>Degraded</span>
@@ -214,8 +227,24 @@
       }).join("");
     }
 
+    var sparkCharts = [];
+
+    function visibleStores(){
+      var q = (document.getElementById("store-filter").value || "").trim().toLowerCase();
+      if (!q) return window.STORES;
+      return window.STORES.filter(function(s){
+        return s.name.toLowerCase().indexOf(q) !== -1 ||
+               s.region.toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
     function renderStores(){
-      document.getElementById("grid").innerHTML = window.STORES.map(function(s, i){
+      var stores = visibleStores();
+
+      sparkCharts.forEach(function(c){ c.destroy(); });
+      sparkCharts = [];
+
+      document.getElementById("grid").innerHTML = stores.map(function(s, i){
         return '<div class="card">' +
           '<div class="store-name">' + s.name + '</div>' +
           '<div class="store-meta">#' + s.id + ' · ' + s.region + '</div>' +
@@ -229,8 +258,8 @@
         '</div>';
       }).join("");
 
-      window.STORES.forEach(function(s, i){
-        new Chart(document.getElementById("spark-" + i), {
+      stores.forEach(function(s, i){
+        sparkCharts.push(new Chart(document.getElementById("spark-" + i), {
           type: "line",
           data: {
             labels: s.runRate7d.map(function(_, d){ return d; }),
@@ -250,7 +279,7 @@
             scales: { x: { display: false }, y: { display: false } },
             elements: { line: { capBezierPoints: true } }
           }
-        });
+        }));
       });
     }
 
@@ -264,6 +293,7 @@
     renderKpis();
     renderStores();
     renderMeta();
+    document.getElementById("store-filter").addEventListener("input", renderStores);
   </script>
 </body>
 </html>
