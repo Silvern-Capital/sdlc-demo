@@ -89,7 +89,25 @@
     margin:0;font-size:14px;font-weight:700;color:var(--ink);
   }
   .section-head .count{font-weight:400;color:var(--gray);}
-  .legend{display:flex;gap:16px;}
+  .store-filter{
+    flex:0 1 280px;
+    margin:0 18px;
+    font-family:inherit;
+    font-size:13px;
+    color:var(--ink);
+    background:#fff;
+    border:1px solid var(--card-border);
+    border-radius:7px;
+    padding:7px 11px;
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .store-filter::placeholder{color:var(--gray);}
+  .store-filter:focus{
+    border-color:var(--bs-red);
+    box-shadow:0 0 0 3px rgba(227,37,39,.18);
+  }
+  .legend{display:flex;gap:16px;flex:none;}
   .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);}
   .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
   .legend .l-ok{background:var(--ok);}
@@ -170,6 +188,7 @@
     <section class="kpis" id="kpis"></section>
     <div class="section-head">
       <h2>Store fleet <span class="count" id="store-count"></span></h2>
+      <input type="text" id="store-filter" class="store-filter" placeholder="Filter by name or region…" autocomplete="off" aria-label="Filter stores by name or region">
       <div class="legend">
         <span><i class="l-ok"></i>Operational</span>
         <span><i class="l-warn"></i>Degraded</span>
@@ -214,8 +233,19 @@
       }).join("");
     }
 
-    function renderStores(){
-      document.getElementById("grid").innerHTML = window.STORES.map(function(s, i){
+    function filteredStores(){
+      var el = document.getElementById("store-filter");
+      var q = el ? el.value.trim().toLowerCase() : "";
+      if (!q) return window.STORES;
+      return window.STORES.filter(function(s){
+        return s.name.toLowerCase().indexOf(q) !== -1 ||
+               s.region.toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
+    function renderStores(list){
+      list = list || window.STORES;
+      document.getElementById("grid").innerHTML = list.map(function(s, i){
         return '<div class="card">' +
           '<div class="store-name">' + s.name + '</div>' +
           '<div class="store-meta">#' + s.id + ' · ' + s.region + '</div>' +
@@ -229,7 +259,7 @@
         '</div>';
       }).join("");
 
-      window.STORES.forEach(function(s, i){
+      list.forEach(function(s, i){
         new Chart(document.getElementById("spark-" + i), {
           type: "line",
           data: {
@@ -260,6 +290,10 @@
       document.getElementById("synced").textContent = "Synced " + t;
       document.getElementById("store-count").textContent = "· " + window.STORES.length + " locations";
     }
+
+    document.getElementById("store-filter").addEventListener("input", function(){
+      renderStores(filteredStores());
+    });
 
     renderKpis();
     renderStores();
