@@ -89,6 +89,19 @@
     margin:0;font-size:14px;font-weight:700;color:var(--ink);
   }
   .section-head .count{font-weight:400;color:var(--gray);}
+  .store-filter{
+    flex:none;width:240px;margin-left:auto;margin-right:18px;
+    font-family:inherit;font-size:13px;color:var(--ink);
+    padding:7px 11px;
+    border:1px solid var(--card-border);border-radius:7px;
+    background:#fff;outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .store-filter::placeholder{color:var(--gray);}
+  .store-filter:focus{
+    border-color:var(--bs-red);
+    box-shadow:0 0 0 3px rgba(227,37,39,.20);
+  }
   .legend{display:flex;gap:16px;}
   .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);}
   .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
@@ -170,6 +183,7 @@
     <section class="kpis" id="kpis"></section>
     <div class="section-head">
       <h2>Store fleet <span class="count" id="store-count"></span></h2>
+      <input type="text" class="store-filter" id="store-filter" placeholder="Filter by name or region…" aria-label="Filter by name or region">
       <div class="legend">
         <span><i class="l-ok"></i>Operational</span>
         <span><i class="l-warn"></i>Degraded</span>
@@ -214,8 +228,22 @@
       }).join("");
     }
 
-    function renderStores(){
-      document.getElementById("grid").innerHTML = window.STORES.map(function(s, i){
+    var sparkCharts = [];
+
+    function filterStores(query){
+      var q = (query || "").trim().toLowerCase();
+      if (!q) return window.STORES;
+      return window.STORES.filter(function(s){
+        return s.name.toLowerCase().indexOf(q) !== -1 ||
+               s.region.toLowerCase().indexOf(q) !== -1;
+      });
+    }
+
+    function renderStores(stores){
+      sparkCharts.forEach(function(c){ c.destroy(); });
+      sparkCharts = [];
+
+      document.getElementById("grid").innerHTML = stores.map(function(s, i){
         return '<div class="card">' +
           '<div class="store-name">' + s.name + '</div>' +
           '<div class="store-meta">#' + s.id + ' · ' + s.region + '</div>' +
@@ -229,8 +257,8 @@
         '</div>';
       }).join("");
 
-      window.STORES.forEach(function(s, i){
-        new Chart(document.getElementById("spark-" + i), {
+      stores.forEach(function(s, i){
+        sparkCharts.push(new Chart(document.getElementById("spark-" + i), {
           type: "line",
           data: {
             labels: s.runRate7d.map(function(_, d){ return d; }),
@@ -250,7 +278,7 @@
             scales: { x: { display: false }, y: { display: false } },
             elements: { line: { capBezierPoints: true } }
           }
-        });
+        }));
       });
     }
 
@@ -262,8 +290,12 @@
     }
 
     renderKpis();
-    renderStores();
+    renderStores(window.STORES);
     renderMeta();
+
+    document.getElementById("store-filter").addEventListener("input", function(){
+      renderStores(filterStores(this.value));
+    });
   </script>
 </body>
 </html>
