@@ -108,3 +108,5 @@ Bonus: `/qa-test-gap` — coverage/gap analysis, ranked by risk, report-only.
 | 4 | `/qa-migration` | data QA without the app |
 | 5 | qa-orchestrator | parallel QA subagent fleet |
 | 6 | Claude in Chrome | interactive visual QA |
+
+_Last demo dry-run: 2026-07-08_
