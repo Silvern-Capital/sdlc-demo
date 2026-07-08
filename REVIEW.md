@@ -1,4 +1,4 @@
-# Review instructions — TreadNet / BSRO IT Ops
+# Review instructions — TreadNet / JM Family IT Ops
 
 ## What Important means here
 
@@ -21,7 +21,7 @@ findings, open the summary with "No blocking issues."
 - No unused variables or dead assignments.
 - User text inputs must be `.trim()`ed before comparison or filtering.
 - Status strings are exactly `"ok" | "warn" | "down"` — flag any other literal.
-- Use the CSS custom properties in `:root` (e.g. `--bs-red`); don't introduce
+- Use the CSS custom properties in `:root` (e.g. `--jm-teal`); don't introduce
   new hard-coded brand hex values.
 
 ## Skip

@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TreadNet · Store Health</title>
+<link rel="icon" type="image/jpeg" href="assets/jm-tree.jpeg">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data.js"></script>
 <style>
   :root{
-    --bs-red:#E32527;
+    --jm-teal:#008A97;
     --ink:#1A1A1A;
     --gray:#6B6C6E;
     --surface:#F4F4F2;
@@ -45,7 +46,7 @@
   .hstatus .live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);}
   .hstatus .live .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(31,138,68,.16);}
   .hstatus .synced{font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums;}
-  .rule{height:3px;background:var(--bs-red);}
+  .rule{height:3px;background:var(--jm-teal);}
 
   /* Layout */
   main{max-width:1180px;margin:0 auto;padding:28px 24px 40px;}
@@ -77,7 +78,7 @@
     margin:6px 0 2px;
     font-variant-numeric:tabular-nums;
   }
-  .kpi-value.alert{color:var(--bs-red);}
+  .kpi-value.alert{color:var(--down);}
   .kpi-delta{font-size:12px;color:var(--gray);}
 
   /* Section header */
@@ -95,6 +96,25 @@
   .legend .l-ok{background:var(--ok);}
   .legend .l-warn{background:var(--warn);}
   .legend .l-down{background:var(--down);}
+
+  /* Store search */
+  .searchrow{margin:0 2px 14px;}
+  #store-search{
+    width:100%;
+    max-width:360px;
+    padding:9px 12px;
+    font-size:13px;
+    font-family:inherit;
+    color:var(--ink);
+    background:#fff;
+    border:1px solid var(--card-border);
+    border-radius:8px;
+  }
+  #store-search:focus{
+    outline:none;
+    border-color:var(--jm-teal);
+    box-shadow:0 0 0 3px rgba(0,138,151,.14);
+  }
 
   /* Store grid */
   .grid{
@@ -153,11 +173,11 @@
 </head>
 <body>
   <header>
-    <img class="bmark" src="assets/bridgestone-mark.png" alt="Bridgestone">
+    <img class="bmark" src="assets/jmfamily-logo.png" alt="JM Family Enterprises">
     <div class="hdivider"></div>
     <div class="htext">
       <div class="htitle">TreadNet · Store Health</div>
-      <div class="hsub">BSRO IT Operations · Bridgestone Retail Operations, LLC</div>
+      <div class="hsub">IT Operations · JM Family Enterprises, Inc.</div>
     </div>
     <div class="hstatus">
       <span class="live"><span class="dot"></span>Live</span>
@@ -176,15 +196,19 @@
         <span><i class="l-down"></i>Down</span>
       </div>
     </div>
+    <div class="searchrow">
+      <input id="store-search" type="text" placeholder="Filter by store name or region…" aria-label="Filter stores by name or region">
+    </div>
     <section class="grid" id="grid"></section>
   </main>
 
   <footer>
-    <span>© 2026 Bridgestone Americas, Inc. · Internal use only</span>
+    <span>© 2026 JM Family Enterprises, Inc. · Internal use only</span>
   </footer>
 
   <script>
     var BUILD_TAG = "treadnet-store-health";
+    var BRAND_TEAL = getComputedStyle(document.documentElement).getPropertyValue("--jm-teal").trim();
     console.log("TreadNet dashboard loaded — " + window.STORES.length + " stores");
 
     function statusLabel(kind, status){
@@ -199,7 +223,7 @@
       var avgFill = stores.reduce(function(a, s){ return a + s.fillRate; }, 0) / stores.length;
 
       var cards = [
-        { label: "Stores monitored", value: stores.length, delta: "All BSRO brands · live" },
+        { label: "Stores monitored", value: stores.length, delta: "All JM Family brands · live" },
         { label: "Avg fill-rate", value: avgFill.toFixed(1) + "%", delta: "Target ≥ 95.0%" },
         { label: "Open tickets", value: openTickets, delta: "Across all stores" },
         { label: "POS systems down", value: posDown, delta: posDown > 0 ? "Needs attention" : "All registers up", alert: posDown > 0 }
@@ -236,7 +260,7 @@
             labels: s.runRate7d.map(function(_, d){ return d; }),
             datasets: [{
               data: s.runRate7d,
-              borderColor: "#E32527",
+              borderColor: BRAND_TEAL,
               borderWidth: 2,
               pointRadius: 0,
               tension: 0.35,
@@ -254,6 +278,18 @@
       });
     }
 
+    function initSearch(){
+      var input = document.getElementById("store-search");
+      input.addEventListener("input", function(){
+        var q = input.value.trim().toLowerCase();
+        var cards = document.querySelectorAll("#grid .card");
+        window.STORES.forEach(function(s, i){
+          var hay = (s.name + " " + s.region).toLowerCase();
+          cards[i].style.display = (q === "" || hay.indexOf(q) !== -1) ? "" : "none";
+        });
+      });
+    }
+
     function renderMeta(){
       var now = new Date();
       var t = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -263,6 +299,7 @@
 
     renderKpis();
     renderStores();
+    initSearch();
     renderMeta();
   </script>
 </body>
