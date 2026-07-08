@@ -59,6 +59,8 @@ git push
 
 The `e2e` job in `.github/workflows/ci.yml` runs the identical suite headless on ubuntu-latest and uploads `playwright-report/` as an artifact on failure. (The original `sanity` job is unchanged.)
 
+On pull requests, a third job — `qa-test-gap` — runs Claude in CI: it executes the qa-test-gap skill against the PR and posts the coverage-gap table as a PR comment. Requires the `ANTHROPIC_API_KEY` repo secret.
+
 ## 4. `/qa-migration` — data QA, no repo/browser in the path *(use case: data QA skill)*
 
 ```
