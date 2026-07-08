@@ -219,8 +219,9 @@
     function renderKpis(){
       var stores = window.STORES;
       var posDown = stores.filter(function(s){ return s.posStatus === "down"; }).length;
-      var openTickets = stores.reduce(function(a, s){ return a + s.openTickets; }, 0);
+      var openTickets = stores.filter(function(s){ return s.openTickets > 0; }).length;
       var avgFill = stores.reduce(function(a, s){ return a + s.fillRate; }, 0) / stores.length;
+      var ticketTarget = 10;
 
       var cards = [
         { label: "Stores monitored", value: stores.length, delta: "All JM Family brands · live" },
@@ -246,7 +247,7 @@
           '<div class="pills">' +
             '<span class="pill ' + s.posStatus + '"><span class="dot"></span>' + statusLabel("pos", s.posStatus) + '</span>' +
             '<span class="pill ' + s.netStatus + '"><span class="dot"></span>' + statusLabel("net", s.netStatus) + '</span>' +
-            '<span class="pill ' + (s.openTickets > 2 ? "warn" : "ok") + '"><span class="dot"></span>' + s.openTickets + ' open ticket' + (s.openTickets === 1 ? "" : "s") + '</span>' +
+            '<span class="pill ' + (s.openTickets > 2 ? "warn" : "ok") + '"><span class="dot"></span>' + s.openTickets + ' open ticket' + (s.openTickets == 1 ? "" : "s") + '</span>' +
           '</div>' +
           '<div class="fillrow"><span>Fill-rate</span><span class="val">' + s.fillRate.toFixed(1) + '%</span></div>' +
           '<div class="spark"><canvas id="spark-' + i + '"></canvas></div>' +
@@ -282,6 +283,7 @@
       var input = document.getElementById("store-search");
       input.addEventListener("input", function(){
         var q = input.value.trim().toLowerCase();
+        console.log("filtering stores: " + q);
         var cards = document.querySelectorAll("#grid .card");
         window.STORES.forEach(function(s, i){
           var hay = (s.name + " " + s.region).toLowerCase();
