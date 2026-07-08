@@ -1,6 +1,6 @@
 # TreadNet · Store Health
 
-Static dashboard for monitoring Bridgestone Retail Operations (BSRO) store fleet health — POS uptime, network status, open tickets, and fill-rate per location.
+Static dashboard for monitoring JM Family Enterprises store fleet health — POS uptime, network status, open tickets, and fill-rate per location.
 
 ## Run
 
@@ -21,7 +21,7 @@ python3 -m http.server 8000
 
 - `index.html` — dashboard UI + render logic (Chart.js sparklines via CDN)
 - `data.js` — store dataset, exposed as `window.STORES`
-- `assets/` — Bridgestone marks
+- `assets/` — JM Family Enterprises marks
 
 ## Data shape
 
@@ -29,9 +29,9 @@ Each store in `window.STORES`:
 
 ```js
 {
-  name: "Firestone Naperville",
+  name: "Southeast Toyota Jacksonville",
   id: "1305",
-  region: "IL · Chicago West",
+  region: "FL · North Florida",
   fillRate: 96.4,
   posStatus: "ok",        // "ok" | "warn" | "down"
   netStatus: "ok",        // "ok" | "warn" | "down"

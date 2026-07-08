@@ -1,11 +1,11 @@
 // TreadNet Store Health — store dataset
-// BSRO IT Operations. Static sample data; no backend.
+// JM Family Enterprises IT Operations. Static sample data; no backend.
 // posStatus / netStatus: "ok" | "warn" | "down"
 window.STORES = [
   {
-    name: "Firestone Naperville",
+    name: "Southeast Toyota Jacksonville",
     id: "1305",
-    region: "IL · Chicago West",
+    region: "FL · North Florida",
     fillRate: 96.4,
     posStatus: "ok",
     netStatus: "ok",
@@ -14,9 +14,9 @@ window.STORES = [
     runRate7d: [212, 198, 224, 207, 231, 188, 219]
   },
   {
-    name: "Firestone Plano",
+    name: "Southeast Toyota Orlando",
     id: "1402",
-    region: "TX · North Texas",
+    region: "FL · Central Florida",
     fillRate: 91.2,
     posStatus: "warn",
     netStatus: "ok",
@@ -25,9 +25,9 @@ window.STORES = [
     runRate7d: [176, 182, 169, 158, 191, 164, 173]
   },
   {
-    name: "Tires Plus Tampa",
+    name: "Southeast Toyota Tampa",
     id: "2211",
-    region: "FL · Gulf Coast",
+    region: "FL · Tampa Bay",
     fillRate: 84.7,
     posStatus: "down",
     netStatus: "warn",
@@ -36,9 +36,9 @@ window.STORES = [
     runRate7d: [148, 139, 121, 96, 88, 71, 64]
   },
   {
-    name: "Firestone Aurora",
+    name: "Southeast Toyota Charlotte",
     id: "1877",
-    region: "CO · Denver Metro",
+    region: "NC · Piedmont",
     fillRate: 97.9,
     posStatus: "ok",
     netStatus: "ok",
@@ -47,9 +47,9 @@ window.STORES = [
     runRate7d: [201, 209, 215, 198, 222, 210, 228]
   },
   {
-    name: "Hibdon OKC",
+    name: "Southeast Toyota Savannah",
     id: "3108",
-    region: "OK · Oklahoma City",
+    region: "GA · Coastal Georgia",
     fillRate: 93.5,
     posStatus: "ok",
     netStatus: "ok",
@@ -58,9 +58,9 @@ window.STORES = [
     runRate7d: [167, 159, 174, 181, 170, 163, 178]
   },
   {
-    name: "Wheel Works San Jose",
+    name: "JM Lexus Margate",
     id: "4402",
-    region: "CA · Bay Area",
+    region: "FL · Broward County",
     fillRate: 95.1,
     posStatus: "ok",
     netStatus: "ok",

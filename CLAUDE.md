@@ -1,6 +1,6 @@
 # TreadNet · Store Health
 
-Internal BSRO IT Ops dashboard. Static page, no build step — open
+Internal JM Family Enterprises IT Ops dashboard. Static page, no build step — open
 `index.html` directly or `python3 -m http.server`.
 
 ## Conventions
@@ -8,8 +8,8 @@ Internal BSRO IT Ops dashboard. Static page, no build step — open
 - Plain ES5-style JS in `<script>` (no modules, no transpile). Match the
   existing `var` + function-expression style.
 - Status vocabulary is fixed: `"ok" | "warn" | "down"`.
-- Colors come from the `:root` CSS custom properties; `--bs-red` is the only
-  brand red.
+- Colors come from the `:root` CSS custom properties; `--jm-teal` is the only
+  brand color.
 - `window.STORES` (from `data.js`) is the single source of truth — render
   functions read from it, never mutate it.
 
