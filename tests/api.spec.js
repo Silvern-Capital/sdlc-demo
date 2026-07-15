@@ -1,4 +1,4 @@
-// TreadNet stores API contract tests — validates /api/stores against the
+// Beacon Site Health API contract tests — validates /api/stores against the
 // documented schema (README "Data shape").
 var test = require("@playwright/test").test;
 var expect = require("@playwright/test").expect;

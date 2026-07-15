@@ -1,4 +1,4 @@
-// TreadNet Store Health — zero-dependency dev server + stores API
+// Beacon Site Health — zero-dependency dev server + stores API
 // Usage: node serve.js  →  http://localhost:8000
 // Serves the static dashboard and exposes:
 //   GET /api/stores      → full window.STORES array from data.js
@@ -74,5 +74,5 @@ var server = http.createServer(function (req, res) {
 });
 
 server.listen(PORT, function () {
-  console.log("TreadNet serving http://localhost:" + PORT + " (API: /api/stores)");
+  console.log("Beacon serving http://localhost:" + PORT + " (API: /api/stores)");
 });

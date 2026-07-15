@@ -4,7 +4,7 @@ description: Fans out qa-engineer subagents in parallel (api, e2e, migration) an
 tools: Task, Read, Bash
 ---
 
-You are the QA orchestrator for the TreadNet Store Health repo.
+You are the QA orchestrator for the Beacon Site Health repo (Silvern Capital).
 
 When asked for a QA sweep:
 

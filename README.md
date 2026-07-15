@@ -1,6 +1,6 @@
-# TreadNet · Store Health
+# Beacon · Site Health
 
-Static dashboard for monitoring JM Family Enterprises store fleet health — POS uptime, network status, open tickets, and fill-rate per location.
+Static dashboard for monitoring Silvern Capital site fleet health — systems uptime, network status, open tickets, and uptime per location.
 
 ## Run
 
@@ -20,18 +20,18 @@ python3 -m http.server 8000
 ## Files
 
 - `index.html` — dashboard UI + render logic (Chart.js sparklines via CDN)
-- `data.js` — store dataset, exposed as `window.STORES`
-- `assets/` — JM Family Enterprises marks
+- `data.js` — site dataset, exposed as `window.STORES`
+- `assets/` — Silvern Capital brand marks
 
 ## Data shape
 
-Each store in `window.STORES`:
+Each site in `window.STORES`:
 
 ```js
 {
-  name: "Southeast Toyota Jacksonville",
+  name: "Silvern Capital — New York",
   id: "1305",
-  region: "FL · North Florida",
+  region: "US · Northeast",
   fillRate: 96.4,
   posStatus: "ok",        // "ok" | "warn" | "down"
   netStatus: "ok",        // "ok" | "warn" | "down"

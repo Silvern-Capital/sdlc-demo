@@ -1,11 +1,11 @@
-// TreadNet Store Health — store dataset
-// JM Family Enterprises IT Operations. Static sample data; no backend.
+// Beacon Site Health — site dataset
+// Silvern Capital IT Operations. Static sample data; no backend.
 // posStatus / netStatus: "ok" | "warn" | "down"
 window.STORES = [
   {
-    name: "Southeast Toyota Jacksonville",
+    name: "Silvern Capital — New York",
     id: "1305",
-    region: "FL · North Florida",
+    region: "US · Northeast",
     fillRate: 96.4,
     posStatus: "ok",
     netStatus: "ok",
@@ -14,9 +14,9 @@ window.STORES = [
     runRate7d: [212, 198, 224, 207, 231, 188, 219]
   },
   {
-    name: "Southeast Toyota Orlando",
+    name: "Silvern Capital — Chicago",
     id: "1402",
-    region: "FL · Central Florida",
+    region: "US · Midwest",
     fillRate: 91.2,
     posStatus: "warn",
     netStatus: "ok",
@@ -25,9 +25,9 @@ window.STORES = [
     runRate7d: [176, 182, 169, 158, 191, 164, 173]
   },
   {
-    name: "Southeast Toyota Tampa",
+    name: "Silvern Capital — Austin",
     id: "2211",
-    region: "FL · Tampa Bay",
+    region: "US · South Central",
     fillRate: 84.7,
     posStatus: "down",
     netStatus: "warn",
@@ -36,9 +36,9 @@ window.STORES = [
     runRate7d: [148, 139, 121, 96, 88, 71, 64]
   },
   {
-    name: "Southeast Toyota Charlotte",
+    name: "Silvern Capital — Denver",
     id: "1877",
-    region: "NC · Piedmont",
+    region: "US · Mountain West",
     fillRate: 97.9,
     posStatus: "ok",
     netStatus: "ok",
@@ -47,9 +47,9 @@ window.STORES = [
     runRate7d: [201, 209, 215, 198, 222, 210, 228]
   },
   {
-    name: "Southeast Toyota Savannah",
+    name: "Silvern Capital — Seattle",
     id: "3108",
-    region: "GA · Coastal Georgia",
+    region: "US · Pacific Northwest",
     fillRate: 93.5,
     posStatus: "ok",
     netStatus: "ok",
@@ -58,9 +58,9 @@ window.STORES = [
     runRate7d: [167, 159, 174, 181, 170, 163, 178]
   },
   {
-    name: "JM Lexus Margate",
+    name: "Silvern Capital — Miami",
     id: "4402",
-    region: "FL · Broward County",
+    region: "US · Southeast",
     fillRate: 95.1,
     posStatus: "ok",
     netStatus: "ok",

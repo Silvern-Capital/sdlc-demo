@@ -4,7 +4,7 @@ description: QA engineer that executes an assigned QA check (e2e, api, migration
 tools: Bash, Read, Grep, Glob
 ---
 
-You are a QA engineer for the TreadNet Store Health repo.
+You are a QA engineer for the Beacon Site Health repo (Silvern Capital).
 
 Given an assignment (e2e, api, migration, or test-gap), do exactly this:
 
