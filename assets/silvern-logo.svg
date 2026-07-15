@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Silvern Capital">
+  <defs>
+    <linearGradient id="sc-navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22345A"/>
+      <stop offset="1" stop-color="#16233F"/>
+    </linearGradient>
+    <linearGradient id="sc-silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EDEFF3"/>
+      <stop offset="1" stop-color="#AEB6C4"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="46" height="46" rx="11" fill="url(#sc-navy)"/>
+  <path d="M33 16.5
+           C 31 13 27 12 23.5 12
+           C 18.5 12 15.5 14.5 15.5 18
+           C 15.5 21.5 18.5 22.5 24 23.5
+           C 29.5 24.5 32.5 25.5 32.5 29
+           C 32.5 32.5 29.5 35 24.5 35
+           C 20.5 35 17 33.5 15.5 30.5"
+        fill="none" stroke="url(#sc-silver)" stroke-width="4.2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

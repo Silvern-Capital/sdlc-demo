@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TreadNet · Store Health</title>
-<link rel="icon" type="image/jpeg" href="assets/jm-tree.jpeg">
+<title>Beacon · Site Health</title>
+<link rel="icon" type="image/svg+xml" href="assets/silvern-logo.svg">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data.js"></script>
 <style>
   :root{
-    --jm-teal:#008A97;
+    --brand:#1B2A4A;
+    --brand-accent:#8A94A6;
     --ink:#1A1A1A;
     --gray:#6B6C6E;
     --surface:#F4F4F2;
@@ -37,7 +38,10 @@
     padding:0 28px;
     gap:18px;
   }
-  .bmark{height:42px;width:auto;flex:none;display:block;}
+  .bmark{height:40px;width:40px;flex:none;display:block;}
+  .brand-word{display:flex;flex-direction:column;justify-content:center;}
+  .brand-word .co{color:var(--brand);font-weight:700;font-size:16px;line-height:1.1;letter-spacing:.2px;}
+  .brand-word .co .cap{color:var(--brand-accent);font-weight:600;}
   .hdivider{width:1px;height:36px;background:#D9D9D9;flex:none;}
   .htext{display:flex;flex-direction:column;justify-content:center;}
   .htitle{color:var(--ink);font-weight:700;font-size:18px;line-height:1.15;letter-spacing:.1px;}
@@ -46,7 +50,7 @@
   .hstatus .live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);}
   .hstatus .live .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(31,138,68,.16);}
   .hstatus .synced{font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums;}
-  .rule{height:3px;background:var(--jm-teal);}
+  .rule{height:3px;background:var(--brand);}
 
   /* Layout */
   main{max-width:1180px;margin:0 auto;padding:28px 24px 40px;}
@@ -97,7 +101,7 @@
   .legend .l-warn{background:var(--warn);}
   .legend .l-down{background:var(--down);}
 
-  /* Store search */
+  /* Site search */
   .searchrow{margin:0 2px 14px;}
   #store-search{
     width:100%;
@@ -112,11 +116,11 @@
   }
   #store-search:focus{
     outline:none;
-    border-color:var(--jm-teal);
-    box-shadow:0 0 0 3px rgba(0,138,151,.14);
+    border-color:var(--brand);
+    box-shadow:0 0 0 3px rgba(27,42,74,.14);
   }
 
-  /* Store grid */
+  /* Site grid */
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
@@ -173,11 +177,14 @@
 </head>
 <body>
   <header>
-    <img class="bmark" src="assets/jmfamily-logo.png" alt="JM Family Enterprises">
+    <img class="bmark" src="assets/silvern-logo.svg" alt="Silvern Capital">
+    <div class="brand-word">
+      <span class="co">Silvern <span class="cap">Capital</span></span>
+    </div>
     <div class="hdivider"></div>
     <div class="htext">
-      <div class="htitle">TreadNet · Store Health</div>
-      <div class="hsub">IT Operations · JM Family Enterprises, Inc.</div>
+      <div class="htitle">Beacon · Site Health</div>
+      <div class="hsub">IT Operations · Silvern Capital</div>
     </div>
     <div class="hstatus">
       <span class="live"><span class="dot"></span>Live</span>
@@ -189,7 +196,7 @@
   <main>
     <section class="kpis" id="kpis"></section>
     <div class="section-head">
-      <h2>Store fleet <span class="count" id="store-count"></span></h2>
+      <h2>Site fleet <span class="count" id="store-count"></span></h2>
       <div class="legend">
         <span><i class="l-ok"></i>Operational</span>
         <span><i class="l-warn"></i>Degraded</span>
@@ -197,36 +204,37 @@
       </div>
     </div>
     <div class="searchrow">
-      <input id="store-search" type="text" placeholder="Filter by store name or region…" aria-label="Filter stores by name or region">
+      <input id="store-search" type="text" placeholder="Filter by site name or region…" aria-label="Filter sites by name or region">
     </div>
     <section class="grid" id="grid"></section>
   </main>
 
   <footer>
-    <span>© 2026 JM Family Enterprises, Inc. · Internal use only</span>
+    <span>© 2026 Silvern Capital · Internal use only</span>
   </footer>
 
   <script>
-    var BUILD_TAG = "treadnet-store-health";
-    var BRAND_TEAL = getComputedStyle(document.documentElement).getPropertyValue("--jm-teal").trim();
-    console.log("TreadNet dashboard loaded — " + window.STORES.length + " stores");
+    var BUILD_TAG = "beacon-site-health";
+    var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim();
+    console.log("Beacon dashboard loaded — " + window.STORES.length + " sites");
 
     function statusLabel(kind, status){
-      if (kind === "pos") return status === "down" ? "POS down" : status === "warn" ? "POS degraded" : "POS up";
+      if (kind === "pos") return status === "down" ? "Systems down" : status === "warn" ? "Systems degraded" : "Systems up";
       return status === "down" ? "Network down" : status === "warn" ? "Network degraded" : "Network up";
     }
 
     function renderKpis(){
       var stores = window.STORES;
       var posDown = stores.filter(function(s){ return s.posStatus === "down"; }).length;
-      var openTickets = stores.reduce(function(a, s){ return a + s.openTickets; }, 0);
+      var openTickets = stores.filter(function(s){ return s.openTickets > 0; }).length;
       var avgFill = stores.reduce(function(a, s){ return a + s.fillRate; }, 0) / stores.length;
+      var ticketTarget = 10;
 
       var cards = [
-        { label: "Stores monitored", value: stores.length, delta: "All JM Family brands · live" },
-        { label: "Avg fill-rate", value: avgFill.toFixed(1) + "%", delta: "Target ≥ 95.0%" },
-        { label: "Open tickets", value: openTickets, delta: "Across all stores" },
-        { label: "POS systems down", value: posDown, delta: posDown > 0 ? "Needs attention" : "All registers up", alert: posDown > 0 }
+        { label: "Sites monitored", value: stores.length, delta: "All regions · live" },
+        { label: "Avg uptime", value: avgFill.toFixed(1) + "%", delta: "Target ≥ 95.0%" },
+        { label: "Open tickets", value: openTickets, delta: "Across all sites" },
+        { label: "Systems down", value: posDown, delta: posDown > 0 ? "Needs attention" : "All systems up", alert: posDown > 0 }
       ];
 
       document.getElementById("kpis").innerHTML = cards.map(function(k){
@@ -246,9 +254,9 @@
           '<div class="pills">' +
             '<span class="pill ' + s.posStatus + '"><span class="dot"></span>' + statusLabel("pos", s.posStatus) + '</span>' +
             '<span class="pill ' + s.netStatus + '"><span class="dot"></span>' + statusLabel("net", s.netStatus) + '</span>' +
-            '<span class="pill ' + (s.openTickets > 2 ? "warn" : "ok") + '"><span class="dot"></span>' + s.openTickets + ' open ticket' + (s.openTickets === 1 ? "" : "s") + '</span>' +
+            '<span class="pill ' + (s.openTickets > 2 ? "warn" : "ok") + '"><span class="dot"></span>' + s.openTickets + ' open ticket' + (s.openTickets == 1 ? "" : "s") + '</span>' +
           '</div>' +
-          '<div class="fillrow"><span>Fill-rate</span><span class="val">' + s.fillRate.toFixed(1) + '%</span></div>' +
+          '<div class="fillrow"><span>Uptime</span><span class="val">' + s.fillRate.toFixed(1) + '%</span></div>' +
           '<div class="spark"><canvas id="spark-' + i + '"></canvas></div>' +
         '</div>';
       }).join("");
@@ -260,7 +268,7 @@
             labels: s.runRate7d.map(function(_, d){ return d; }),
             datasets: [{
               data: s.runRate7d,
-              borderColor: BRAND_TEAL,
+              borderColor: BRAND_COLOR,
               borderWidth: 2,
               pointRadius: 0,
               tension: 0.35,
@@ -282,6 +290,7 @@
       var input = document.getElementById("store-search");
       input.addEventListener("input", function(){
         var q = input.value.trim().toLowerCase();
+        console.log("filtering sites: " + q);
         var cards = document.querySelectorAll("#grid .card");
         window.STORES.forEach(function(s, i){
           var hay = (s.name + " " + s.region).toLowerCase();

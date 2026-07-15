@@ -28,11 +28,11 @@ Runs `tests/api.spec.js` against `serve.js` (started automatically on :8000), va
 
 ## 2. Break it live — `/qa-e2e` catches a one-line defect *(use case: e2e QA skill)*
 
-Edit `data.js` — change Tampa's posStatus:
+Edit `data.js` — change Austin's posStatus:
 
 ```js
 // break it:
-posStatus: "offline",   // was "down"  (Southeast Toyota Tampa, id 2211)
+posStatus: "offline",   // was "down"  (Silvern Capital — Austin, id 2211)
 ```
 
 Then:
@@ -69,9 +69,9 @@ On pull requests, a third job — `qa-test-gap` — runs Claude in CI: it execut
 
 Validates `qa/data_migrated.json` against `data.js` and reports **exactly 3 seeded discrepancies**, each with the check that proves it:
 
-1. `[row-count/id-integrity]` — Southeast Toyota Savannah (id 3108) missing
-2. `[status-vocabulary]` — JM Lexus Margate netStatus `"online"`
-3. `[field-drift]` — Southeast Toyota Orlando fillRate 91.2 → 89.7
+1. `[row-count/id-integrity]` — Silvern Capital — Seattle (id 3108) missing
+2. `[status-vocabulary]` — Silvern Capital — Miami netStatus `"online"`
+3. `[field-drift]` — Silvern Capital — Chicago fillRate 91.2 → 89.7
 
 ## 5. QA orchestrator — fleet of subagents *(use case: parallel QA agents)*
 
@@ -92,7 +92,7 @@ npm run serve
 Then in Claude Code (with the Chrome extension connected):
 
 ```
-Open http://localhost:8000 in Chrome and inspect the Southeast Toyota Tampa card —
+Open http://localhost:8000 in Chrome and inspect the Silvern Capital — Austin card —
 do the status pills match what data.js says?
 ```
 
@@ -108,3 +108,5 @@ Bonus: `/qa-test-gap` — coverage/gap analysis, ranked by risk, report-only.
 | 4 | `/qa-migration` | data QA without the app |
 | 5 | qa-orchestrator | parallel QA subagent fleet |
 | 6 | Claude in Chrome | interactive visual QA |
+
+_Last demo dry-run: 2026-07-08_

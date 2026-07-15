@@ -1,4 +1,4 @@
-// TreadNet dashboard e2e — asserts the rendered UI against data.js
+// Beacon Site Health dashboard e2e — asserts the rendered UI against data.js
 // (window.STORES is the single source of truth).
 var test = require("@playwright/test").test;
 var expect = require("@playwright/test").expect;
@@ -8,7 +8,7 @@ require("../data.js");
 var STORES = global.window.STORES;
 var VALID_STATUSES = ["ok", "warn", "down"];
 
-test.describe("TreadNet dashboard", function () {
+test.describe("Beacon Site Health dashboard", function () {
 
   test("page loads, all store cards render, no console errors", async function ({ page }) {
     var consoleErrors = [];
@@ -30,7 +30,7 @@ test.describe("TreadNet dashboard", function () {
     var expected = (sum / STORES.length).toFixed(1) + "%";
 
     await page.goto("/");
-    var kpi = page.locator(".kpi", { hasText: "Avg fill-rate" });
+    var kpi = page.locator(".kpi", { hasText: "Avg uptime" });
     await expect(kpi.locator(".kpi-value")).toHaveText(expected);
   });
 
@@ -71,11 +71,11 @@ test.describe("TreadNet dashboard", function () {
     await page.goto("/");
     var visibleCards = page.locator("#grid .card:visible");
 
-    await page.fill("#store-search", "tampa");
+    await page.fill("#store-search", "austin");
     await expect(visibleCards).toHaveCount(1);
-    await expect(visibleCards.first().locator(".store-name")).toHaveText("Southeast Toyota Tampa");
+    await expect(visibleCards.first().locator(".store-name")).toHaveText("Silvern Capital — Austin");
 
-    await page.fill("#store-search", " tampa ");
+    await page.fill("#store-search", " austin ");
     await expect(visibleCards).toHaveCount(1);
 
     await page.fill("#store-search", "");

@@ -4,5 +4,5 @@
   "author": {
     "name": "Silvern-Capital"
   },
-  "description": "QA agent kit: qa-engineer + qa-orchestrator agents and four QA skills (e2e, api, migration, test-gap) for the TreadNet Store Health demo."
+  "description": "QA agent kit: qa-engineer + qa-orchestrator agents and four QA skills (e2e, api, migration, test-gap) for the Beacon Site Health demo."
 }

@@ -1,8 +1,8 @@
 {
-  "name": "treadnet-store-health",
+  "name": "beacon-site-health",
   "version": "1.0.0",
   "private": true,
-  "description": "TreadNet Store Health dashboard + QA demo assets",
+  "description": "Beacon Site Health dashboard (Silvern Capital) + QA demo assets",
   "scripts": {
     "serve": "node serve.js",
     "test:e2e": "npx playwright test",
