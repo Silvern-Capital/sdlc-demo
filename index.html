@@ -214,7 +214,6 @@
   </footer>
 
   <script>
-    var BUILD_TAG = "beacon-site-health";
     var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim();
     console.log("Beacon dashboard loaded — " + window.SITES.length + " sites");
 
@@ -290,7 +289,6 @@
       var input = document.getElementById("store-search");
       input.addEventListener("input", function(){
         var q = input.value.trim().toLowerCase();
-        console.log("filtering sites: " + q);
         var cards = document.querySelectorAll("#grid .card");
         window.SITES.forEach(function(s, i){
           var hay = (s.name + " " + s.region).toLowerCase();
