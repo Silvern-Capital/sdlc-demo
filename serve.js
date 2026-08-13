@@ -1,7 +1,7 @@
 // Beacon Site Health — zero-dependency dev server + stores API
 // Usage: node serve.js  →  http://localhost:8000
 // Serves the static dashboard and exposes:
-//   GET /api/stores      → full window.STORES array from data.js
+//   GET /api/stores      → full window.SITES array from data.js
 //   GET /api/stores/:id  → single store, 404 if unknown
 var http = require("http");
 var fs = require("fs");
@@ -9,7 +9,7 @@ var path = require("path");
 
 global.window = {};
 require("./data.js");
-var STORES = global.window.STORES;
+var SITES = global.window.SITES;
 
 var PORT = process.env.PORT || 8000;
 var ROOT = __dirname;
@@ -39,14 +39,14 @@ var server = http.createServer(function (req, res) {
   }
 
   if (url === "/api/stores") {
-    sendJson(res, 200, STORES);
+    sendJson(res, 200, SITES);
     return;
   }
 
   var m = url.match(/^\/api\/stores\/([^\/]+)$/);
   if (m) {
     var id = decodeURIComponent(m[1]);
-    var store = STORES.filter(function (s) { return s.id === id; })[0];
+    var store = SITES.filter(function (s) { return s.id === id; })[0];
     if (store) {
       sendJson(res, 200, store);
     } else {

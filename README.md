@@ -20,12 +20,12 @@ python3 -m http.server 8000
 ## Files
 
 - `index.html` — dashboard UI + render logic (Chart.js sparklines via CDN)
-- `data.js` — site dataset, exposed as `window.STORES`
+- `data.js` — site dataset, exposed as `window.SITES`
 - `assets/` — Silvern Capital brand marks
 
 ## Data shape
 
-Each site in `window.STORES`:
+Each site in `window.SITES`:
 
 ```js
 {
@@ -43,4 +43,4 @@ Each site in `window.STORES`:
 
 ## CI
 
-`.github/workflows/ci.yml` checks that `index.html` / `data.js` exist and that `data.js` parses and exposes a non-empty `window.STORES` array.
+`.github/workflows/ci.yml` checks that `index.html` / `data.js` exist and that `data.js` parses and exposes a non-empty `window.SITES` array.
