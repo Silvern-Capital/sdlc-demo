@@ -25,7 +25,7 @@ request as a first-time implementation:
 - Status vocabulary is fixed: `"ok" | "warn" | "down"`.
 - Colors come from the `:root` CSS custom properties; `--brand` (deep navy) is
   the primary brand color, with `--brand-accent` (silver) as the secondary.
-- `window.STORES` (from `data.js`) is the single source of truth; render
+- `window.SITES` (from `data.js`) is the single source of truth; render
   functions read from it, never mutate it.
 
 ## Verifying changes

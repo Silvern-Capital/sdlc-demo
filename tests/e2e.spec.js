@@ -1,11 +1,11 @@
 // Beacon Site Health dashboard e2e — asserts the rendered UI against data.js
-// (window.STORES is the single source of truth).
+// (window.SITES is the single source of truth).
 var test = require("@playwright/test").test;
 var expect = require("@playwright/test").expect;
 
 global.window = {};
 require("../data.js");
-var STORES = global.window.STORES;
+var SITES = global.window.SITES;
 var VALID_STATUSES = ["ok", "warn", "down"];
 
 test.describe("Beacon Site Health dashboard", function () {
@@ -20,14 +20,14 @@ test.describe("Beacon Site Health dashboard", function () {
     });
 
     await page.goto("/");
-    await expect(page.locator("#grid .card")).toHaveCount(STORES.length);
-    expect(STORES.length).toBe(6);
+    await expect(page.locator("#grid .card")).toHaveCount(SITES.length);
+    expect(SITES.length).toBe(6);
     expect(consoleErrors).toEqual([]);
   });
 
-  test("Avg fill-rate KPI matches the value computed from window.STORES", async function ({ page }) {
-    var sum = STORES.reduce(function (a, s) { return a + s.fillRate; }, 0);
-    var expected = (sum / STORES.length).toFixed(1) + "%";
+  test("Avg fill-rate KPI matches the value computed from window.SITES", async function ({ page }) {
+    var sum = SITES.reduce(function (a, s) { return a + s.fillRate; }, 0);
+    var expected = (sum / SITES.length).toFixed(1) + "%";
 
     await page.goto("/");
     var kpi = page.locator(".kpi", { hasText: "Avg uptime" });
@@ -37,10 +37,10 @@ test.describe("Beacon Site Health dashboard", function () {
   test("every status pill has exactly one valid status class matching data.js", async function ({ page }) {
     await page.goto("/");
     var cards = page.locator("#grid .card");
-    await expect(cards).toHaveCount(STORES.length);
+    await expect(cards).toHaveCount(SITES.length);
 
-    for (var i = 0; i < STORES.length; i++) {
-      var store = STORES[i];
+    for (var i = 0; i < SITES.length; i++) {
+      var store = SITES[i];
       var pills = cards.nth(i).locator(".pill");
 
       // First pill = POS, second = network (render order in index.html).
@@ -79,6 +79,6 @@ test.describe("Beacon Site Health dashboard", function () {
     await expect(visibleCards).toHaveCount(1);
 
     await page.fill("#store-search", "");
-    await expect(visibleCards).toHaveCount(STORES.length);
+    await expect(visibleCards).toHaveCount(SITES.length);
   });
 });

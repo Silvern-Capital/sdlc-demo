@@ -220,10 +220,9 @@
   </footer>
 
   <script>
-    var BUILD_TAG = "beacon-site-health";
     var GENERIC_VIEW_LIMIT = 6; // max cards shown in the default (unfiltered) view
     var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim();
-    console.log("Beacon dashboard loaded — " + window.STORES.length + " sites");
+    console.log("Beacon dashboard loaded — " + window.SITES.length + " sites");
 
     function statusLabel(kind, status){
       if (kind === "pos") return status === "down" ? "Systems down" : status === "warn" ? "Systems degraded" : "Systems up";
@@ -231,7 +230,7 @@
     }
 
     function renderKpis(){
-      var stores = window.STORES;
+      var stores = window.SITES;
       var posDown = stores.filter(function(s){ return s.posStatus === "down"; }).length;
       var openTickets = stores.filter(function(s){ return s.openTickets > 0; }).length;
       var avgFill = stores.reduce(function(a, s){ return a + s.fillRate; }, 0) / stores.length;
@@ -254,7 +253,7 @@
     }
 
     function renderStores(){
-      document.getElementById("grid").innerHTML = window.STORES.map(function(s, i){
+      document.getElementById("grid").innerHTML = window.SITES.map(function(s, i){
         return '<div class="card"' + (i >= GENERIC_VIEW_LIMIT ? ' style="display:none"' : '') + '>' +
           '<div class="store-name">' + s.name + '</div>' +
           '<div class="store-meta">#' + s.id + ' · ' + s.region + '</div>' +
@@ -268,7 +267,7 @@
         '</div>';
       }).join("");
 
-      window.STORES.forEach(function(s, i){
+      window.SITES.forEach(function(s, i){
         new Chart(document.getElementById("spark-" + i), {
           type: "line",
           data: {
@@ -297,9 +296,8 @@
       var input = document.getElementById("store-search");
       input.addEventListener("input", function(){
         var q = input.value.trim().toLowerCase();
-        console.log("filtering sites: " + q);
         var cards = document.querySelectorAll("#grid .card");
-        window.STORES.forEach(function(s, i){
+        window.SITES.forEach(function(s, i){
           var hay = (s.name + " " + s.region).toLowerCase();
           if (q === "") {
             // Unfiltered view: cap at GENERIC_VIEW_LIMIT cards.
@@ -316,7 +314,7 @@
       var now = new Date();
       var t = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
       document.getElementById("synced").textContent = "Synced " + t;
-      var total = window.STORES.length;
+      var total = window.SITES.length;
       var shown = Math.min(GENERIC_VIEW_LIMIT, total);
       document.getElementById("store-count").textContent = shown < total
         ? "· showing " + shown + " of " + total + " locations"
