@@ -123,8 +123,14 @@
   /* Site grid */
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+    grid-template-columns:repeat(3,1fr);
     gap:16px;
+  }
+  @media (max-width:980px){
+    .grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:640px){
+    .grid{grid-template-columns:1fr;}
   }
   .card{
     background:#fff;
@@ -215,6 +221,7 @@
 
   <script>
     var BUILD_TAG = "beacon-site-health";
+    var GENERIC_VIEW_LIMIT = 6; // max cards shown in the default (unfiltered) view
     var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim();
     console.log("Beacon dashboard loaded — " + window.STORES.length + " sites");
 
@@ -248,7 +255,7 @@
 
     function renderStores(){
       document.getElementById("grid").innerHTML = window.STORES.map(function(s, i){
-        return '<div class="card">' +
+        return '<div class="card"' + (i >= GENERIC_VIEW_LIMIT ? ' style="display:none"' : '') + '>' +
           '<div class="store-name">' + s.name + '</div>' +
           '<div class="store-meta">#' + s.id + ' · ' + s.region + '</div>' +
           '<div class="pills">' +
@@ -294,7 +301,13 @@
         var cards = document.querySelectorAll("#grid .card");
         window.STORES.forEach(function(s, i){
           var hay = (s.name + " " + s.region).toLowerCase();
-          cards[i].style.display = (q === "" || hay.indexOf(q) !== -1) ? "" : "none";
+          if (q === "") {
+            // Unfiltered view: cap at GENERIC_VIEW_LIMIT cards.
+            cards[i].style.display = i < GENERIC_VIEW_LIMIT ? "" : "none";
+          } else {
+            // Filtering searches the full dataset, no cap.
+            cards[i].style.display = hay.indexOf(q) !== -1 ? "" : "none";
+          }
         });
       });
     }
@@ -303,7 +316,11 @@
       var now = new Date();
       var t = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
       document.getElementById("synced").textContent = "Synced " + t;
-      document.getElementById("store-count").textContent = "· " + window.STORES.length + " locations";
+      var total = window.STORES.length;
+      var shown = Math.min(GENERIC_VIEW_LIMIT, total);
+      document.getElementById("store-count").textContent = shown < total
+        ? "· showing " + shown + " of " + total + " locations"
+        : "· " + total + " locations";
     }
 
     renderKpis();
