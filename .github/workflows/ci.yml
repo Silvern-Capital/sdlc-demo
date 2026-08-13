@@ -16,16 +16,16 @@ jobs:
           test -f index.html
           test -f data.js
 
-      - name: data.js parses and exposes STORES
+      - name: data.js parses and exposes SITES
         run: |
           node -e '
             global.window = {};
             require("./data.js");
-            const s = window.STORES;
+            const s = window.SITES;
             if (!Array.isArray(s) || s.length === 0) {
-              throw new Error("window.STORES is not a non-empty array");
+              throw new Error("window.SITES is not a non-empty array");
             }
-            console.log("data.js OK — " + s.length + " stores");
+            console.log("data.js OK — " + s.length + " sites");
           '
 
   e2e:
