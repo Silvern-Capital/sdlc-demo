@@ -7,7 +7,7 @@ var path = require("path");
 
 global.window = {};
 require(path.join(__dirname, "..", "data.js"));
-var SOURCE = global.window.STORES;
+var SOURCE = global.window.SITES;
 var MIGRATED = require(path.join(__dirname, "data_migrated.json"));
 
 var VALID_STATUSES = ["ok", "warn", "down"];
