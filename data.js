@@ -1,6 +1,7 @@
 // Beacon Site Health — site dataset
 // Silvern Capital IT Operations. Static sample data; no backend.
 // posStatus / netStatus: "ok" | "warn" | "down"
+// TODO: validate status values on load instead of trusting the data
 window.STORES = [
   {
     name: "Silvern Capital — New York",

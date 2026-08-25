@@ -32,3 +32,20 @@ request as a first-time implementation:
 
 `node -e 'global.window={};require("./data.js");…'` is what CI runs; see
 `.github/workflows/ci.yml`.
+
+## Hooks and the PR script
+
+This repo has Claude Code hooks in `.claude/settings.json` (scripts in
+`hooks/`). They allow edits to the app, tests, `qa/`, `assets/`, docs, and the
+agent's own skills and agents (`.claude/skills/`, `.claude/agents/`), and
+deny edits to `.github/`, the `.claude` settings files that wire the hooks,
+`hooks/`, `scripts/`, and package files. They deny `git merge`, `gh pr merge`, force pushes, pushes to main,
+and recursive deletes. Every tool call is written to `audit/audit.jsonl`.
+If app files changed, run the tests before you finish; the Stop hook asks
+for it. A denied call is expected in the demo: say why it was denied and
+move on, do not work around it.
+
+To open the pull request for a feature, run `node scripts/open_pr.js`. It
+creates a uniquely named branch if you are still on main, commits, pushes,
+and runs `gh pr create` with the gates listed in the body. A person
+approves and merges on GitHub (Gate 1).

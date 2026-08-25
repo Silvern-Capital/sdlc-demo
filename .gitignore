@@ -3,3 +3,13 @@
 node_modules/
 test-results/
 playwright-report/
+
+# gated SDLC demo: local evidence and local Claude Code settings stay local
+audit/*.jsonl
+pipeline/state.json
+pipeline/pr-body.md
+.claude/settings.local.json
+__pycache__/
+.pytest_cache/
+.venv/
+agent-sdk/workspace/.git/
