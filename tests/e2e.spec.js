@@ -67,6 +67,17 @@ test.describe("Beacon Site Health dashboard", function () {
     }
   });
 
+  test("header shows the tagline directly under the title", async function ({ page }) {
+    await page.goto("/");
+    var tagline = page.locator(".htext .htagline");
+    await expect(tagline).toHaveText("Fleet health at a glance");
+
+    // Tagline sits below the title in the header text block.
+    var titleBox = await page.locator(".htext .htitle").boundingBox();
+    var taglineBox = await tagline.boundingBox();
+    expect(taglineBox.y).toBeGreaterThan(titleBox.y);
+  });
+
   test("search filters by name/region and trims padded input", async function ({ page }) {
     await page.goto("/");
     var visibleCards = page.locator("#grid .card:visible");

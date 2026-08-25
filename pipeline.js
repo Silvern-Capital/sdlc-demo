@@ -29,7 +29,7 @@ function shortTime(iso) {
 }
 
 function statusPill(status) {
-  var cls = status == "done" ? "ok" : status == "running" ? "warn" : status == "failed" ? "down" : "";
+  var cls = status === "done" ? "ok" : status === "running" ? "warn" : status === "failed" ? "down" : "";
   return '<span class="pill ' + cls + '"><span class="dot"></span>' + esc(status || "pending") + '</span>';
 }
 
