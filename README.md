@@ -2,6 +2,42 @@
 
 Static dashboard for monitoring Silvern Capital site fleet health — systems uptime, network status, open tickets, and uptime per location.
 
+## Quickstart
+
+```bash
+git clone https://github.com/Silvern-Capital/sdlc-demo.git
+cd sdlc-demo
+npm install
+npm run serve        # http://localhost:8000 and http://localhost:8000/pipeline.html
+claude               # start Claude Code in the repo; the hooks and skills load automatically
+```
+
+Everything the demo needs ships in the repo: the policy hooks (`hooks/`),
+committed skills and agents (`.claude/`), the QA plugin (`qa-agent-plugin/`),
+and the GitHub Actions workflows (`.github/workflows/`). `DEMO-SDLC.md` is the
+step-by-step runbook.
+
+### Review and security
+
+Code review and a quick security pass are built into Claude Code — no install:
+
+```text
+/code-review high        # reviews the branch diff; add --fix to apply findings
+/security-review         # checks the branch diff for vulnerabilities
+```
+
+The deep, multi-agent security scan is a plugin from Anthropic's official
+marketplace:
+
+```text
+/plugin install claude-security@claude-plugins-official
+/claude-security scan my branch
+```
+
+(If the marketplace is not found: `/plugin marketplace add anthropics/claude-plugins-official`,
+then `/reload-plugins`.) The scan writes a `CLAUDE-SECURITY-<timestamp>/`
+folder with a findings report and patch files; nothing is auto-applied.
+
 ## Run
 
 No build step. Open directly:
