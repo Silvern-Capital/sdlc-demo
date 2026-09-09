@@ -2,6 +2,10 @@
 // of the workshop. Kept here as the fallback if a live run goes sideways:
 // copy it to the repo root as csv.js.
 //
+// The stub Claude writes first, so the test fails on its assertion before
+// the real export exists, is just:
+//   window.toCsv = function (stores) { return ""; };
+//
 // Exposes window.toCsv(stores) -> string. Plain ES5, no dependencies.
 // Fields that contain a comma, a quote or a newline are quoted, and quotes
 // inside them are doubled, which is what Excel expects.
