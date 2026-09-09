@@ -32,7 +32,13 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Install Playwright chromium
-        run: npx playwright install --with-deps chromium
+        # --with-deps runs apt-get, and the runner image ships a Google
+        # Chrome apt source that sometimes serves a stale index (hash
+        # mismatch on dl.google.com). Nothing here needs that source, so
+        # drop it before apt runs.
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/google-chrome*.list
+          npx playwright install --with-deps chromium
       - name: Run Playwright tests (headless)
         run: npx playwright test
       - name: Upload playwright report
