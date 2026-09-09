@@ -31,14 +31,16 @@ Google Chrome you already have.
 ## What the workshop turns on
 
 - `CLAUDE.md` — conventions and what done means. It asks; it cannot enforce.
-- `hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
-- `hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
+- `.claude/hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
+- `.claude/hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
 - `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
-- `.claude/skills/eval-outcomes` — grades a finished feature on outcomes with quoted evidence.
+- `.claude/skills/pr-ready` — everything before a pull request except code review: tests, coverage (Node's built-in), lint, scope of the diff, feature tried, PR description with the evidence pasted. Ends READY or NOT READY.
+- `.claude/skills/autocover` — reads the coverage table, writes the missing node tests for uncovered app code as new files, re-runs, reports before and after. Never edits app code or existing tests.
+- `.claude/skills/triage` — reproduce a failing check, quote the assertion, name the file and line, report cause, blast radius and the one-line fix. Does not fix.
 - `.claude/agents/csv-reviewer.md` — a subagent with fresh context that compares the export with the running API and is told to refute: if it cannot prove every check agrees, the verdict is DISAGREES.
 - `.claude/agents/export-checker.md`, `export-builder.md` — an agent team where the test and the code have different owners: the checker writes the test for the next column first and sends each failure straight to the builder; the builder may only change `csv.js`. Agent teams are experimental; `.claude/settings.json` enables them. Set `"teammateMode": "tmux"` there if you want split panes and have tmux.
 - `beacon-loop-plugin/` — all of the above packaged as a plugin. `/plugin marketplace add ./beacon-loop-plugin` then `/plugin install beacon-loop@beacon-loop`.
-- `.github/workflows/` — `ci.yml` (node tests, lint, browser suite), `claude-code-review.yml` (review comment, advice only), `ci-triage.yml` (explains a red run on a PR).
+- `.github/workflows/` — `ci.yml` (node tests, lint, browser suite), `claude-review.yml` (AI review comment, advice only), `claude-triage.yml` (AI: explains a red run on a PR). The `claude-` prefix marks the AI checks; `ci` is plain scripts.
 
 Prove the hooks can go red: `bash scripts/check_hooks.sh`.
 

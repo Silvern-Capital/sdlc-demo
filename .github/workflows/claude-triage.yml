@@ -1,4 +1,4 @@
-# CI triage: when the ci workflow fails on a pull request, Claude reads the
+# claude-triage: when the ci workflow fails on a pull request, Claude reads the
 # failed job log and posts the likely cause and a suggested fix as a PR
 # comment. It never edits code and never reruns anything; it explains. The
 # fix is for the author's session to make (the /loop in the workshop reads
@@ -10,7 +10,7 @@
 #
 # Note: workflow_run triggers only once this file is on the default branch.
 
-name: ci-triage
+name: claude-triage
 
 on:
   workflow_run:
@@ -45,7 +45,7 @@ jobs:
           tail -c 60000 failed.log > failed-tail.log
           echo "Fetched $(wc -l < failed.log) lines of failed-job logs."
 
-      - name: Claude CI triage
+      - name: Claude triage (AI, advice only)
         if: env.PR_NUMBER != ''
         uses: anthropics/claude-code-action@v1
         with:
