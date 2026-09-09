@@ -12,7 +12,7 @@
 #   1. stop any dev server still listening on :8000 or :8123
 #   2. remove worktrees other than this one, then prune
 #   3. go back to main, discarding uncommitted changes
-#   4. delete local agent/* branches (they were pushed; the PR has them)
+#   4. delete local agent/* and worktree-* branches
 #   5. restore every baseline file (never touches .git or node_modules)
 #   6. delete files a live run created that are not in the baseline
 #
@@ -66,7 +66,7 @@ else
 fi
 
 # 4. local agent/* branches (pushed to the PR already; local copies are noise)
-git branch --list 'agent/*' | sed 's/^[* ]*//' | while read -r b; do
+git branch --list 'agent/*' 'worktree-*' | sed 's/^[* ]*//' | while read -r b; do
   [ -n "$b" ] && git branch -q -D "$b" && echo "deleted local branch $b"
 done
 

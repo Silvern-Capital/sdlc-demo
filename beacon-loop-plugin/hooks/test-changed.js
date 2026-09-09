@@ -10,20 +10,28 @@ var fs = require("fs");
 var path = require("path");
 var cp = require("child_process");
 
-var ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+// The event JSON carries cwd. In a worktree (claude --worktree) that is the
+// worktree root while CLAUDE_PROJECT_DIR stays at the main checkout, so
+// prefer cwd, walking up to the nearest package.json.
+var INPUT = (function () {
+  try { return JSON.parse(fs.readFileSync(0, "utf8") || "{}"); } catch (e) { return {}; }
+})();
+function findRoot(start) {
+  var dir = start;
+  while (dir && fs.existsSync(dir)) {
+    if (fs.existsSync(path.join(dir, "package.json"))) return dir;
+    var up = path.dirname(dir);
+    if (up === dir) break;
+    dir = up;
+  }
+  return null;
+}
+var ROOT = findRoot(INPUT.cwd) || process.env.CLAUDE_PROJECT_DIR || process.cwd();
 
 function testFiles() {
   var dir = path.join(ROOT, "tests");
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter(function (f) { return /\.test\.js$/.test(f); }).map(function (f) { return "tests/" + f; });
-}
-
-function readInput() {
-  try {
-    return JSON.parse(fs.readFileSync(0, "utf8") || "{}");
-  } catch (e) {
-    return {};
-  }
 }
 
 // App files: .js and .html at the repo root, and anything under tests/.
@@ -35,7 +43,7 @@ function isAppFile(file) {
   return /^[^\/]+\.(js|html)$/.test(rel);
 }
 
-var input = readInput();
+var input = INPUT;
 var toolInput = input.tool_input || {};
 var file = toolInput.file_path || toolInput.notebook_path || "";
 if (!isAppFile(file)) process.exit(0);
