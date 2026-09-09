@@ -1,31 +1,58 @@
 # Beacon · Site Health
 
-Static dashboard for monitoring Silvern Capital site fleet health — systems uptime, network status, open tickets, and uptime per location.
+Static dashboard for the Silvern Capital site fleet: uptime, network status,
+open tickets per location. It is also the repo for the hands-on Claude Code
+workshop "The agent builds it. The checks hold. You keep the merge."
 
-## Run
-
-No build step. Open directly:
-
-```bash
-open index.html
-```
-
-or serve it:
+## Quickstart
 
 ```bash
-python3 -m http.server 8000
-# → http://localhost:8000
+git clone https://github.com/Silvern-Capital/sdlc-demo.git
+cd sdlc-demo
+npm install            # Playwright for the browser suite; nothing else
+npm run serve          # http://localhost:8000, API at /api/stores
+node --test tests/*.test.js     # the node tests, no browser, under a second
+claude                 # the hooks, skills and agents load automatically
 ```
+
+No browser download is needed on your laptop. The node tests run in plain
+Node; the Playwright browser suite runs on CI and, locally, drives the
+Google Chrome you already have.
 
 ## Files
 
-- `index.html` — dashboard UI + render logic (Chart.js sparklines via CDN)
-- `data.js` — site dataset, exposed as `window.SITES`
-- `assets/` — Silvern Capital brand marks
+- `index.html` — dashboard UI and render logic (Chart.js sparklines via CDN)
+- `data.js` — site dataset, exposed as `window.STORES`; the single source of truth
+- `serve.js` — zero-dependency dev server and the `/api/stores` API
+- `tests/*.test.js` — node:test files, run with `node --test tests/*.test.js`
+- `tests/*.spec.js` — Playwright suite (API contract and browser e2e), run on CI
+- `scripts/lint.js` — a small, deterministic linter (exit 0 when clean)
+
+## What the workshop turns on
+
+- `CLAUDE.md` — conventions and what done means. It asks; it cannot enforce.
+- `hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
+- `hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
+- `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
+- `.claude/skills/eval-outcomes` — grades a finished feature on outcomes with quoted evidence.
+- `.claude/agents/csv-reviewer.md` — a subagent with fresh context that compares the export with the running API and is told to refute: if it cannot prove every check agrees, the verdict is DISAGREES.
+- `.claude/agents/export-checker.md`, `export-builder.md` — an agent team where the test and the code have different owners: the checker writes the test for the next column first and sends each failure straight to the builder; the builder may only change `csv.js`. Agent teams are experimental; `.claude/settings.json` enables them. Set `"teammateMode": "tmux"` there if you want split panes and have tmux.
+- `beacon-loop-plugin/` — all of the above packaged as a plugin. `/plugin marketplace add ./beacon-loop-plugin` then `/plugin install beacon-loop@beacon-loop`.
+- `.github/workflows/` — `ci.yml` (node tests, lint, browser suite), `claude-code-review.yml` (review comment, advice only), `ci-triage.yml` (explains a red run on a PR).
+
+Prove the hooks can go red: `bash scripts/check_hooks.sh`.
+
+Open the pull request for a change: `node scripts/open_pr.js` (add `--dry-run`
+to only print). It commits on a fresh branch, pushes, and opens a PR whose body
+carries the pasted test and lint runs. A person merges on GitHub.
+
+Reset between runs: `bash scripts/reset_demo.sh` restores the baseline tarball
+that lives next to the repo and removes anything a live run created. After a
+deliberate change you want to keep, `bash scripts/reset_demo.sh --snapshot`.
 
 ## Data shape
 
-Each site in `window.SITES`:
+Each site in `window.STORES`:
 
 ```js
 {
@@ -41,6 +68,15 @@ Each site in `window.SITES`:
 }
 ```
 
-## CI
+## Review
 
-`.github/workflows/ci.yml` checks that `index.html` / `data.js` exist and that `data.js` parses and exposes a non-empty `window.SITES` array.
+`/code-review high` and `/security-review` are built into Claude Code. The deep
+scan is a plugin from the official marketplace:
+
+```text
+/plugin install claude-security@claude-plugins-official
+/claude-security scan my branch
+```
+
+It writes a `CLAUDE-SECURITY-<timestamp>/` folder with a findings report and
+patch files; nothing is applied for you.

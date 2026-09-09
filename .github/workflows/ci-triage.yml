@@ -1,0 +1,89 @@
+# CI triage: when the ci workflow fails on a pull request, Claude reads the
+# failed job log and posts the likely cause and a suggested fix as a PR
+# comment. It never edits code and never reruns anything; it explains. The
+# fix is for the author's session to make (the /loop in the workshop reads
+# the same log and fixes it).
+#
+# Starts when the "ci" workflow finishes. Only does work when the conclusion
+# is failure and the run came from a pull request. Uses the same
+# claude-code-action@v1 and ANTHROPIC_API_KEY secret as ci.yml.
+#
+# Note: workflow_run triggers only once this file is on the default branch.
+
+name: ci-triage
+
+on:
+  workflow_run:
+    workflows: ["ci"]
+    types: [completed]
+
+jobs:
+  triage:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    env:
+      RUN_ID: ${{ github.event.workflow_run.id }}
+      PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the failed job logs
+        if: env.PR_NUMBER != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --log-failed > failed.log || true
+          tail -c 60000 failed.log > failed-tail.log
+          echo "Fetched $(wc -l < failed.log) lines of failed-job logs."
+
+      - name: Claude CI triage
+        if: env.PR_NUMBER != ''
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            CI run ${{ github.event.workflow_run.id }} of the "ci" workflow
+            failed on pull request #${{ env.PR_NUMBER }} in
+            ${{ github.repository }}. The failed job log is in failed-tail.log
+            in the working directory. Read it.
+
+            The jobs in ci.yml are: tests (node --test tests/*.test.js and
+            node scripts/lint.js) and e2e (npm install, npx playwright install
+            chromium, npx playwright test).
+
+            Write a Markdown comment with exactly these sections:
+
+            ### Likely cause
+            One or two sentences.
+
+            ### Failing test
+            The test name and the failing assertion or error, quoted from the
+            log. If no test failed and the job broke for another reason
+            (install, browser download, timeout), say what broke instead.
+
+            ### Suggested fix
+            Two to five short bullet points. Name the file to change when the
+            log shows it. Say whether the fix belongs in the code, in the
+            test, or in the workflow.
+
+            Start the comment with the line: **CI triage (automated)**
+            End it with: _This note is advice, not a decision. A person
+            approves the fix._
+
+            Do not invent file names or line numbers that are not in the log.
+            Post the comment on the pull request with `gh pr comment
+            ${{ env.PR_NUMBER }} --body-file`. Do not edit any files.
+          claude_args: '--allowedTools "Read,Grep,Bash(gh pr comment:*),Bash(gh pr view:*),Bash(gh run view:*)"'
+
+      - name: Explain why nothing was posted
+        if: env.PR_NUMBER == ''
+        run: echo "No pull request number on this run (forks do not carry one). Nothing to post."
