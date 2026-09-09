@@ -11,22 +11,27 @@ var path = require("path");
 var cp = require("child_process");
 
 // The event JSON carries cwd. In a worktree (claude --worktree) that is the
-// worktree root while CLAUDE_PROJECT_DIR stays at the main checkout, so
-// prefer cwd, walking up to the nearest package.json.
+// worktree root while CLAUDE_PROJECT_DIR stays at the main checkout. Use cwd
+// only when git says it belongs to this same repository (same common dir),
+// and take git's toplevel for it; otherwise stay on CLAUDE_PROJECT_DIR.
 var INPUT = (function () {
   try { return JSON.parse(fs.readFileSync(0, "utf8") || "{}"); } catch (e) { return {}; }
 })();
-function findRoot(start) {
-  var dir = start;
-  while (dir && fs.existsSync(dir)) {
-    if (fs.existsSync(path.join(dir, "package.json"))) return dir;
-    var up = path.dirname(dir);
-    if (up === dir) break;
-    dir = up;
-  }
-  return null;
+var PROJECT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+function gitOut(dir, args) {
+  var r = cp.spawnSync("git", ["-C", dir].concat(args), { encoding: "utf8" });
+  return r.status === 0 ? r.stdout.trim() : null;
 }
-var ROOT = findRoot(INPUT.cwd) || process.env.CLAUDE_PROJECT_DIR || process.cwd();
+function worktreeRoot(cwd) {
+  if (!cwd || typeof cwd !== "string" || !fs.existsSync(cwd)) return null;
+  if (cwd.split(path.sep).indexOf("node_modules") !== -1) return null;
+  var projectCommon = gitOut(PROJECT, ["rev-parse", "--path-format=absolute", "--git-common-dir"]);
+  var cwdCommon = gitOut(cwd, ["rev-parse", "--path-format=absolute", "--git-common-dir"]);
+  if (!projectCommon || !cwdCommon || projectCommon !== cwdCommon) return null;
+  var top = gitOut(cwd, ["rev-parse", "--show-toplevel"]);
+  return top && fs.existsSync(path.join(top, "package.json")) ? top : null;
+}
+var ROOT = worktreeRoot(INPUT.cwd) || PROJECT;
 
 function testFiles() {
   var dir = path.join(ROOT, "tests");

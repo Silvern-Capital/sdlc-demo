@@ -55,7 +55,7 @@ run, say so; do not claim it.
 
 Draft it with these headings: **What changed** (two sentences), **Why**
 (the ticket in one line), **Evidence** (the pasted output of 1 to 3, and
-the `csv-reviewer` verdict if it ran), **Look here first** (the one file
+the `qa` findings if it ran), **Look here first** (the one file
 a reviewer should open first).
 
 ## Verdict
