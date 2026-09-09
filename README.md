@@ -33,7 +33,7 @@ Google Chrome you already have.
 - `CLAUDE.md` — conventions and what done means. It asks; it cannot enforce.
 - `.claude/hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
 - `.claude/hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
-- `.claude/hooks/guard-push.js` — PreToolUse on Bash: refuses `git push --force` (and `-f`, `--force-with-lease`) before it runs. Not part of the workshop flow; the example of a guard on an action rather than a check on a result.
+- `.claude/hooks/guard-push.js` — PreToolUse on Bash: refuses `git push --force` (and `-f`, `--force-with-lease`) before it runs. Deny by default: only a plain `git push [-u] origin <branch>` is allowed; everything else that pushes is refused. Not part of the workshop flow; the example of a guard on an action rather than a check on a result. The real guard is branch protection on GitHub; this stops the agent from trying.
 - `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
 - `.claude/skills/pr-ready` — everything before a pull request except code review: tests, coverage (Node's built-in), lint, scope of the diff, feature tried, PR description with the evidence pasted. Ends READY or NOT READY.
 - `.claude/agents/qa.md` (sonnet) — exploratory QA in a fresh context: tries the cases nobody wrote a test for and files findings with a repro, expected versus actual, and the test that would have caught each.
