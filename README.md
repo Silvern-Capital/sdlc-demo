@@ -34,7 +34,9 @@ Google Chrome you already have.
 - `.claude/hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
 - `.claude/hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
 - `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
-- `.claude/skills/ready-for-review` — the checklist before asking for review: scope, tests green, the new test bites, lint, feature tried, PR text with the evidence pasted. Ends READY or NOT READY.
+- `.claude/skills/pr-ready` — everything before a pull request except code review: tests, coverage (Node's built-in), lint, scope of the diff, feature tried, PR description with the evidence pasted. Ends READY or NOT READY.
+- `.claude/skills/autocover` — reads the coverage table, writes the missing node tests for uncovered app code as new files, re-runs, reports before and after. Never edits app code or existing tests.
+- `.claude/skills/triage` — reproduce a failing check, quote the assertion, name the file and line, report cause, blast radius and the one-line fix. Does not fix.
 - `.claude/agents/csv-reviewer.md` — a subagent with fresh context that compares the export with the running API and is told to refute: if it cannot prove every check agrees, the verdict is DISAGREES.
 - `.claude/agents/export-checker.md`, `export-builder.md` — an agent team where the test and the code have different owners: the checker writes the test for the next column first and sends each failure straight to the builder; the builder may only change `csv.js`. Agent teams are experimental; `.claude/settings.json` enables them. Set `"teammateMode": "tmux"` there if you want split panes and have tmux.
 - `beacon-loop-plugin/` — all of the above packaged as a plugin. `/plugin marketplace add ./beacon-loop-plugin` then `/plugin install beacon-loop@beacon-loop`.
