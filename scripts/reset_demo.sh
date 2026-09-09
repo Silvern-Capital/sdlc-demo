@@ -52,5 +52,5 @@ find . -type d -empty -not -path "./.git/*" -not -path "./node_modules/*" -delet
 
 echo
 echo "reset done. Baseline restored; the checks should be green:"
-node --test tests/*.test.js 2>&1 | tail -4
+node --test tests/*.test.js 2>&1 | grep -E '^# (tests|pass|fail)'
 node scripts/lint.js

@@ -9,9 +9,9 @@
 //   node scripts/open_pr.js --title "Add CSV export"
 //   node scripts/open_pr.js --branch feat/export   # use this branch name instead of generating one
 //
-// If the repo is on main, a new branch named agent/<slug>-<yyyymmdd-hhmmss>
-// is created. A fresh name every time, on purpose: the workshop runs the
-// same feature many times. Merging is never done here; a person does that
+// A new branch named agent/<slug>-<yyyymmdd-hhmmss> is created from wherever
+// you are. A fresh name every time, on purpose: the workshop runs the same
+// feature many times, on many laptops, against one remote. Merging is never done here; a person does that
 // on GitHub after reading the diff and the reports.
 var fs = require("fs");
 var path = require("path");
@@ -45,8 +45,8 @@ function testFiles() {
 }
 
 function changedFiles() {
-  return git(["status", "--porcelain"], { soft: true })
-    .split("\n").filter(Boolean)
+  var r = cp.spawnSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" });
+  return String(r.stdout || "").split("\n").filter(Boolean)
     .map(function (l) { return l.slice(3).trim(); }).filter(Boolean);
 }
 
@@ -70,12 +70,9 @@ function main() {
   var base = arg("--base", "main");
   var current = git(["rev-parse", "--abbrev-ref", "HEAD"], { soft: true }) || "HEAD";
   var title = arg("--title", null) || "Add CSV export of the site fleet";
-  var branch = arg("--branch", null);
-  if (!branch) {
-    branch = (current === base || current === "HEAD" || current === "master")
-      ? "agent/" + slugify(title) + "-" + stamp()
-      : current;
-  }
+  // A fresh branch every time unless --branch is given: a room full of
+  // people pushing the same branch name would reject each other's pushes.
+  var branch = arg("--branch", null) || ("agent/" + slugify(title) + "-" + stamp());
 
   var tests = run("node", ["--test"].concat(testFiles()));
   var lint = run("node", ["scripts/lint.js"]);

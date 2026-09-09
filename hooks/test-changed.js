@@ -13,7 +13,9 @@ var cp = require("child_process");
 var ROOT = process.env.CLAUDE_PROJECT_DIR || path.resolve(__dirname, "..");
 
 function testFiles() {
-  return fs.readdirSync(path.join(ROOT, "tests")).filter(function (f) { return /\.test\.js$/.test(f); }).map(function (f) { return "tests/" + f; });
+  var dir = path.join(ROOT, "tests");
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter(function (f) { return /\.test\.js$/.test(f); }).map(function (f) { return "tests/" + f; });
 }
 
 function readInput() {
@@ -37,6 +39,7 @@ var input = readInput();
 var toolInput = input.tool_input || {};
 var file = toolInput.file_path || toolInput.notebook_path || "";
 if (!isAppFile(file)) process.exit(0);
+if (!testFiles().length) process.exit(0);   // nothing to run in this repo yet
 
 var r = cp.spawnSync("node", ["--test"].concat(testFiles()), { cwd: ROOT, encoding: "utf8" });
 if (r.status !== 0) {

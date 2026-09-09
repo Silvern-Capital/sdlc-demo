@@ -11,7 +11,8 @@ Given a feature that was just implemented, evaluate OUTCOMES, not effort:
    one line each. Example for the CSV export: (a) csv.js exposes
    window.toCsv, (b) the header row is the eight documented columns,
    (c) one row per site with values equal to data.js, (d) a test in tests/
-   asserts it, (e) nothing else changed behavior.
+   asserts it and was shown failing on a wrong answer first, (e) nothing
+   else changed behavior.
 2. Run the evidence commands:
    - `node --test tests/*.test.js` - functional truth, no browser
    - `node scripts/lint.js` - hygiene
