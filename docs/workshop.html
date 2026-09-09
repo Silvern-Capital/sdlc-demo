@@ -414,6 +414,12 @@ Do not commit, branch, or push.</div>
              describes the test run instead of pasting it.</pre></div>
     <p class="note"><code>/goal</code> on its own shows the condition, turns and spend. Let it run; read steps 4 and 5 while it works.</p>
   </div>
+  <div class="see" style="margin-top:14px">
+    <h3>Good to know: the same review as a hook</h3>
+    <p>Today the goal requires the QA review, so the evaluator sends Claude back until it has run. In the engineering team&#8217;s setup the review is a Stop hook instead: when Claude says it is done, the hook starts a separate run of the QA agent on the diff, once per diff, and a blocking finding goes back to Claude before it can stop. Same rule, enforced by a hook rather than by the goal. One line does it:</p>
+    <div class="prompt cmd">claude -p --agent qa "Review the current diff. Report blocking findings."</div>
+    <p class="note">It is a separate billed run each time, and it takes about a minute, which is why it belongs at Stop and not on every edit. Not part of today&#8217;s flow.</p>
+  </div>
 </section>
 
 <!-- ============================================================ 04 -->
