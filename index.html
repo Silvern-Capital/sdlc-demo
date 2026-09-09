@@ -7,7 +7,6 @@
 <link rel="icon" type="image/svg+xml" href="assets/silvern-logo.svg">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data.js"></script>
-<script src="csv.js"></script>
 <style>
   :root{
     --brand:#1B2A4A;
@@ -51,21 +50,6 @@
   .hstatus .live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);}
   .hstatus .live .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(31,138,68,.16);}
   .hstatus .synced{font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums;}
-  .export-btn{
-    margin-left:18px;
-    flex:none;
-    display:inline-flex;align-items:center;gap:7px;
-    font-family:inherit;
-    font-size:12px;font-weight:600;
-    color:var(--brand);
-    background:#fff;
-    border:1px solid var(--brand);
-    border-radius:8px;
-    padding:8px 14px;
-    cursor:pointer;
-  }
-  .export-btn:hover{background:var(--brand);color:#fff;}
-  .export-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(27,42,74,.22);}
   .rule{height:3px;background:var(--brand);}
 
   /* Layout */
@@ -206,7 +190,6 @@
       <span class="live"><span class="dot"></span>Live</span>
       <span class="synced" id="synced">Synced just now</span>
     </div>
-    <button class="export-btn" id="export-csv" type="button" aria-label="Export site fleet as CSV">Export CSV</button>
   </header>
   <div class="rule"></div>
 
@@ -314,22 +297,6 @@
       });
     }
 
-    function initExport(){
-      var btn = document.getElementById("export-csv");
-      btn.addEventListener("click", function(){
-        var csv = window.toCsv(window.STORES);
-        var blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "beacon-sites.csv";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      });
-    }
-
     function renderMeta(){
       var now = new Date();
       var t = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -340,7 +307,6 @@
     renderKpis();
     renderStores();
     initSearch();
-    initExport();
     renderMeta();
   </script>
 </body>
