@@ -22,9 +22,12 @@ ticket will, and try to break it.
    exist. For a UI change: the button exists, is wired, and does what the
    label says. Write your plan as a short list before you run anything.
 3. Run each case yourself, against the code as it is now, and compare
-   with the source of truth (the running API at localhost:8000, or start
-   one with `PORT=8123 node serve.js & P=$!; sleep 1; ...; kill $P`; the
-   data file; the ticket's own words). Keep the exact command and output.
+   with the source of truth. Use the running API at localhost:8000 if
+   `curl -sf localhost:8000/api/stores` answers; otherwise read `data.js`
+   directly with `node -e`. Never start a server or any background
+   process: a process left running keeps the goal waiting on you. Every
+   command you run must finish on its own. Keep the exact command and
+   output.
 4. For every case that surprises you, write a finding:
    - **severity**: blocking (a user would hit it), minor (works, but wrong
      in a way a user would notice), or note (worth knowing)
@@ -38,5 +41,5 @@ ticket will, and try to break it.
    **blocking: <finding>**.
 
 Rules: run every case, never infer; a case you could not run is a finding
-of its own. Do not edit any file. Do not run the browser suite. Report and
-stop.
+of its own. Do not edit any file. Do not run the browser suite. Do not
+start servers or background processes. Report and stop.
