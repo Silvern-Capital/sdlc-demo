@@ -8,7 +8,7 @@
     {
       "name": "beacon-loop",
       "source": "./",
-      "description": "The two hooks, the pr-ready skill, the qa agent and the checker/builder team from the Beacon loop workshop."
+      "description": "The three hooks, the pr-ready skill, the qa agent and the checker/builder team from the Beacon loop workshop."
     }
   ]
 }

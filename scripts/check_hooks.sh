@@ -27,6 +27,9 @@ run() {
   fi
 }
 
+run "guard-push: force push is refused" guard-push.js 2 '{"tool_name":"Bash","tool_input":{"command":"git push --force origin main"}}'
+run "guard-push: normal push is allowed" guard-push.js 0 '{"tool_name":"Bash","tool_input":{"command":"git push -u origin feature"}}'
+
 run "post: README.md is not an app file, silent"  test-changed.js 0 '{"tool_name":"Edit","tool_input":{"file_path":"README.md"}}'
 run "post: data.js edit, tests green, silent"     test-changed.js 0 '{"tool_name":"Edit","tool_input":{"file_path":"data.js"}}'
 run "stop: nothing changed, silent"               stop-check.js   0 '{"stop_hook_active":false}'
@@ -40,4 +43,4 @@ rm -f "$TMP/tests/zz-planted.test.js"
 
 rm -rf "$TMP"
 if [ "$FAILED" = 1 ]; then echo "SOME CHECKS FAILED"; exit 1; fi
-echo "both hooks go red when they should, and stay quiet when they should"
+echo "all hooks go red when they should, and stay quiet when they should"
