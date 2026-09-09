@@ -8,7 +8,8 @@ var fs = require("fs");
 var path = require("path");
 
 var ROOT = path.join(__dirname, "..");
-var FILES = ["index.html", "data.js", "pipeline.js", "serve.js"]
+var FILES = ["index.html", "data.js", "csv.js", "serve.js"]
+  .filter(function (f) { return fs.existsSync(path.join(ROOT, f)); })
   .concat(fs.readdirSync(path.join(ROOT, "tests")).map(function (f) { return "tests/" + f; }));
 
 var RULES = [
@@ -31,7 +32,6 @@ FILES.forEach(function (rel) {
   var lines = fs.readFileSync(full, "utf8").split("\n");
   lines.forEach(function (line, i) {
     if (isLintException(line)) return;
-    // Only lint script content in HTML files, not markup.
     RULES.forEach(function (rule) {
       if (rule.id === "console-log" && rel.indexOf("tests/") === 0) return; // tests may log
       if (rule.re.test(line)) {

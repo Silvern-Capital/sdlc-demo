@@ -1,7 +1,8 @@
 # CI triage: when the ci workflow fails on a pull request, Claude reads the
-# failed job logs and posts the likely cause and a suggested fix as a PR
+# failed job log and posts the likely cause and a suggested fix as a PR
 # comment. It never edits code and never reruns anything; it explains. The
-# fix is for a person (or the agent on the next turn) to make.
+# fix is for the author's session to make (the /loop in the workshop reads
+# the same log and fixes it).
 #
 # Starts when the "ci" workflow finishes. Only does work when the conclusion
 # is failure and the run came from a pull request. Uses the same
@@ -31,7 +32,6 @@ jobs:
       id-token: write
     env:
       RUN_ID: ${{ github.event.workflow_run.id }}
-      # Empty for pull requests from forks. The steps below skip in that case.
       PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +42,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --log-failed > failed.log || true
-          # Keep the request small. The end of the log is what matters.
           tail -c 60000 failed.log > failed-tail.log
           echo "Fetched $(wc -l < failed.log) lines of failed-job logs."
 
@@ -57,10 +56,10 @@ jobs:
             ${{ github.repository }}. The failed job log is in failed-tail.log
             in the working directory. Read it.
 
-            The jobs in ci.yml are: sanity (index.html and data.js exist,
-            data.js parses and exposes window.STORES), e2e (npm install,
-            npx playwright install chromium, npx playwright test), and
-            qa-test-gap (Claude analysis, pull requests only).
+            The jobs in ci.yml are: tests (node --test tests/*.test.js and
+            node scripts/lint.js), e2e (npm install, npx playwright install
+            chromium, npx playwright test), and qa-test-gap (Claude analysis,
+            pull requests only).
 
             Write a Markdown comment with exactly these sections:
 
@@ -79,7 +78,7 @@ jobs:
 
             Start the comment with the line: **CI triage (automated)**
             End it with: _This note is advice, not a decision. A person
-            approves the fix at Gate 1._
+            approves the fix._
 
             Do not invent file names or line numbers that are not in the log.
             Post the comment on the pull request with `gh pr comment

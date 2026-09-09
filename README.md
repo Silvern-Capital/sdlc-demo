@@ -1,63 +1,55 @@
 # Beacon · Site Health
 
-Static dashboard for monitoring Silvern Capital site fleet health — systems uptime, network status, open tickets, and uptime per location.
+Static dashboard for the Silvern Capital site fleet: uptime, network status,
+open tickets per location. It is also the repo for the hands-on Claude Code
+workshop "The agent builds it. The checks hold. You keep the merge."
 
 ## Quickstart
 
 ```bash
 git clone https://github.com/Silvern-Capital/sdlc-demo.git
 cd sdlc-demo
-npm install
-npm run serve        # http://localhost:8000 and http://localhost:8000/pipeline.html
-claude               # start Claude Code in the repo; the hooks and skills load automatically
+npm install            # Playwright for the browser suite; nothing else
+npm run serve          # http://localhost:8000, API at /api/stores
+node --test tests/*.test.js     # the node tests, no browser, under a second
+claude                 # the hooks, skills and agents load automatically
 ```
 
-Everything the demo needs ships in the repo: the policy hooks (`hooks/`),
-committed skills and agents (`.claude/`), the QA plugin (`qa-agent-plugin/`),
-and the GitHub Actions workflows (`.github/workflows/`). `DEMO-SDLC.md` is the
-step-by-step runbook.
-
-### Review and security
-
-Code review and a quick security pass are built into Claude Code — no install:
-
-```text
-/code-review high        # reviews the branch diff; add --fix to apply findings
-/security-review         # checks the branch diff for vulnerabilities
-```
-
-The deep, multi-agent security scan is a plugin from Anthropic's official
-marketplace:
-
-```text
-/plugin install claude-security@claude-plugins-official
-/claude-security scan my branch
-```
-
-(If the marketplace is not found: `/plugin marketplace add anthropics/claude-plugins-official`,
-then `/reload-plugins`.) The scan writes a `CLAUDE-SECURITY-<timestamp>/`
-folder with a findings report and patch files; nothing is auto-applied.
-
-## Run
-
-No build step. Open directly:
-
-```bash
-open index.html
-```
-
-or serve it:
-
-```bash
-python3 -m http.server 8000
-# → http://localhost:8000
-```
+No browser download is needed on your laptop. The node tests run in plain
+Node; the Playwright browser suite runs on CI and, locally, drives the
+Google Chrome you already have.
 
 ## Files
 
-- `index.html` — dashboard UI + render logic (Chart.js sparklines via CDN)
-- `data.js` — site dataset, exposed as `window.STORES`
-- `assets/` — Silvern Capital brand marks
+- `index.html` — dashboard UI and render logic (Chart.js sparklines via CDN)
+- `data.js` — site dataset, exposed as `window.STORES`; the single source of truth
+- `serve.js` — zero-dependency dev server and the `/api/stores` API
+- `tests/*.test.js` — node:test files, run with `node --test tests/*.test.js`
+- `tests/*.spec.js` — Playwright suite (API contract and browser e2e), run on CI
+- `scripts/lint.js` — a small, deterministic linter (exit 0 when clean)
+
+## What the workshop turns on
+
+- `CLAUDE.md` — conventions and what done means. It asks; it cannot enforce.
+- `hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
+- `hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
+- `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
+- `.claude/skills/eval-outcomes` — grades a finished feature on outcomes with quoted evidence.
+- `.claude/agents/csv-reviewer.md` — a subagent with fresh context, told to find a row where the export disagrees with the data.
+- `.claude/agents/export-builder.md`, `export-reviewer.md` — two teammates that settle the next increment by messaging each other (agent teams; experimental, enabled in `.claude/settings.json`).
+- `.claude/agents/qa-orchestrator.md`, `qa-engineer.md` and the `qa-*` skills — the QA sweep: three subagents on Haiku (API, browser e2e, test gaps), one verdict table. `Use the qa-orchestrator agent to run a full QA sweep.`
+- `beacon-loop-plugin/` — all of the above packaged as a plugin. `/plugin marketplace add ./beacon-loop-plugin` then `/plugin install beacon-loop@beacon-loop`.
+- `.github/workflows/` — `ci.yml` (node tests, lint, browser suite, test-gap comment on PRs), `claude-code-review.yml` (review comment, advice only), `ci-triage.yml` (explains a red run on a PR).
+
+Prove the hooks can go red: `bash scripts/check_hooks.sh`.
+
+Open the pull request for a change: `node scripts/open_pr.js` (add `--dry-run`
+to only print). It commits on a fresh branch, pushes, and opens a PR whose body
+carries the pasted test and lint runs. A person merges on GitHub.
+
+Reset between runs: `bash scripts/reset_demo.sh` restores the baseline tarball
+that lives next to the repo and removes anything a live run created. After a
+deliberate change you want to keep, `bash scripts/reset_demo.sh --snapshot`.
 
 ## Data shape
 
@@ -77,42 +69,15 @@ Each site in `window.STORES`:
 }
 ```
 
-## CI
+## Review
 
-`.github/workflows/ci.yml` checks that `index.html` / `data.js` exist and that `data.js` parses and exposes a non-empty `window.STORES` array.
+`/code-review high` and `/security-review` are built into Claude Code. The deep
+scan is a plugin from the official marketplace:
 
-## Gated SDLC demo
-
-This repo also shows a gated software delivery loop. An agent takes a requirement, writes code and a test, and opens a pull request. Hooks check every step. A person approves before anything merges. See `DEMO-SDLC.md` for the order to run things on a call.
-
-Terms used here:
-
-- Hook: a small program Claude Code runs at a fixed point in the agent's work. The hooks live in `hooks/` and are wired in `.claude/settings.json`.
-- Gate: a check that must pass before the next step. Some gates are code (the hooks, CI). One gate is a person.
-- Gate 1: the human approval on the pull request. The agent cannot merge. `git merge` and `gh pr merge` are denied by the hooks.
-- CI triage: when CI fails, Claude reads the failed job log and posts the likely cause and a suggested fix as a PR comment. It does not change code.
-
-What is in the repo:
-
-- `hooks/policy.js` is the policy in one file. Edits may only land on the app, its tests, QA fixtures, assets, and docs. Workflows, settings, hooks, scripts, and package files are protected. Destructive git and shell commands are denied.
-- `hooks/pre-tool-use.js` runs before every tool call and allows or denies it. `hooks/post-tool-use.js` records what came back and notices test runs. `hooks/stop.js` refuses to let the agent finish if app files changed and the tests did not run after the last edit. `hooks/user-prompt-submit.js` records the requirement.
-- `audit/audit.jsonl` gets one line per tool call, decision, test run, and stop. `pipeline/state.json` is the current picture, stage by stage.
-- `pipeline.html` renders both files. Open it next to `index.html` (there is a link in the header).
-- `scripts/open_pr.js` commits, pushes a uniquely named branch, and opens a PR whose body lists the gates passed.
-- `scripts/sync_pr.js` pulls CI, review, approval, and merge state from GitHub into the pipeline page.
-- `.github/workflows/claude-code-review.yml` has Claude review every PR and post a comment starting with "Verdict:". Advice only.
-- `.github/workflows/ci-triage.yml` runs when the `ci` workflow fails on a PR and posts the triage comment.
-- `agent-sdk/` is the same idea through the Claude Agent SDK in Python. Self contained; see its README.
-
-Run it:
-
-```bash
-npm run serve                      # http://localhost:8000 and http://localhost:8000/pipeline.html
-node scripts/reset_pipeline.js     # fresh audit log and pipeline state
-bash scripts/check_hooks.sh        # every hook with sample input; allow exits 0, deny exits 2
-claude                             # in Claude Code: "Add a header tagline under the title"
-node scripts/open_pr.js            # new branch, commit, push, gh pr create (add --dry-run to only print)
-node scripts/sync_pr.js            # after CI, the Claude review, and the human approval
+```text
+/plugin install claude-security@claude-plugins-official
+/claude-security scan my branch
 ```
 
-The `claude-code-review` and `ci-triage` workflows use the same `anthropics/claude-code-action@v1` and `ANTHROPIC_API_KEY` repo secret as the `qa-test-gap` job. `ci-triage` triggers from the default branch, so it starts working once this change is merged to main.
+It writes a `CLAUDE-SECURITY-<timestamp>/` folder with a findings report and
+patch files; nothing is applied for you.

@@ -189,7 +189,6 @@
     <div class="hstatus">
       <span class="live"><span class="dot"></span>Live</span>
       <span class="synced" id="synced">Synced just now</span>
-      <a href="pipeline.html" style="font-size:11px;color:var(--brand);text-decoration:none;font-weight:600">Pipeline view</a>
     </div>
   </header>
   <div class="rule"></div>
@@ -217,7 +216,6 @@
   <script>
     var BUILD_TAG = "beacon-site-health";
     var BRAND_COLOR = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim();
-    console.log("Beacon dashboard loaded — " + window.STORES.length + " sites");
 
     function statusLabel(kind, status){
       if (kind === "pos") return status === "down" ? "Systems down" : status === "warn" ? "Systems degraded" : "Systems up";
@@ -255,7 +253,7 @@
           '<div class="pills">' +
             '<span class="pill ' + s.posStatus + '"><span class="dot"></span>' + statusLabel("pos", s.posStatus) + '</span>' +
             '<span class="pill ' + s.netStatus + '"><span class="dot"></span>' + statusLabel("net", s.netStatus) + '</span>' +
-            '<span class="pill ' + (s.openTickets > 2 ? "warn" : "ok") + '"><span class="dot"></span>' + s.openTickets + ' open ticket' + (s.openTickets == 1 ? "" : "s") + '</span>' +
+            '<span class="pill ' + (s.openTickets > 2 ? "warn" : "ok") + '"><span class="dot"></span>' + s.openTickets + ' open ticket' + (s.openTickets === 1 ? "" : "s") + '</span>' +
           '</div>' +
           '<div class="fillrow"><span>Uptime</span><span class="val">' + s.fillRate.toFixed(1) + '%</span></div>' +
           '<div class="spark"><canvas id="spark-' + i + '"></canvas></div>' +
@@ -291,7 +289,6 @@
       var input = document.getElementById("store-search");
       input.addEventListener("input", function(){
         var q = input.value.trim().toLowerCase();
-        console.log("filtering sites: " + q);
         var cards = document.querySelectorAll("#grid .card");
         window.STORES.forEach(function(s, i){
           var hay = (s.name + " " + s.region).toLowerCase();

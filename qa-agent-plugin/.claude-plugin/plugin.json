@@ -1,8 +1,0 @@
-{
-  "name": "qa-agent",
-  "version": "0.1.0",
-  "author": {
-    "name": "Silvern-Capital"
-  },
-  "description": "QA agent kit: qa-engineer + qa-orchestrator agents and four QA skills (e2e, api, migration, test-gap) for the Beacon Site Health demo."
-}

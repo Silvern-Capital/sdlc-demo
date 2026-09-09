@@ -5,48 +5,36 @@ on:
   pull_request:
 
 jobs:
-  sanity:
+  tests:
+    # The same checks the hooks run on your laptop: node tests and lint.
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
-
-      - name: Files exist
-        run: |
-          test -f index.html
-          test -f data.js
-
-      - name: data.js parses and exposes STORES
-        run: |
-          node -e '
-            global.window = {};
-            require("./data.js");
-            const s = window.STORES;
-            if (!Array.isArray(s) || s.length === 0) {
-              throw new Error("window.STORES is not a non-empty array");
-            }
-            console.log("data.js OK — " + s.length + " stores");
-          '
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Node tests
+        run: node --test tests/*.test.js
+      - name: Lint
+        run: node scripts/lint.js
 
   e2e:
+    # The browser suite. It downloads its own Chromium here, so nobody needs
+    # one on their laptop.
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Install dependencies
         run: npm install
-
       - name: Install Playwright chromium
         run: npx playwright install --with-deps chromium
-
       - name: Run Playwright tests (headless)
         run: npx playwright test
-
       - name: Upload playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -56,6 +44,7 @@ jobs:
           retention-days: 7
 
   qa-test-gap:
+    # The QA sweep's test-gap leg, as a PR comment: what has no test yet.
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -66,7 +55,6 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-
       - name: Claude QA test-gap analysis
         uses: anthropics/claude-code-action@v1
         with:

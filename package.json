@@ -1,10 +1,12 @@
 {
   "name": "beacon-site-health",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Beacon Site Health dashboard (Silvern Capital) + QA demo assets",
+  "description": "Beacon Site Health dashboard (Silvern Capital) + the loop workshop assets",
   "scripts": {
     "serve": "node serve.js",
+    "test": "node --test tests/*.test.js",
+    "lint": "node scripts/lint.js",
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "SLOWMO=1000 npx playwright test tests/e2e.spec.js --headed --workers=1"
   },

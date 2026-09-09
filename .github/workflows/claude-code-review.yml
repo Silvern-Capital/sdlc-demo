@@ -1,9 +1,9 @@
 # Claude code review: Claude reads every pull request and leaves comments.
 #
 # Claude is a reviewer, not an approver. Branch protection decides who can
-# approve, and that stays a person (Gate 1). Claude's comments are advice for
-# the human reviewer. Uses the same claude-code-action@v1 and
-# ANTHROPIC_API_KEY secret as the qa-test-gap job in ci.yml.
+# approve, and that stays a person. Claude's comments are advice for the
+# human reviewer. Uses the same claude-code-action@v1 and ANTHROPIC_API_KEY
+# secret as the qa-test-gap job in ci.yml.
 
 name: claude-code-review
 
@@ -46,13 +46,16 @@ jobs:
             for colors, window.STORES as the single source of truth).
 
             Check the diff for:
-            - Correctness bugs and missing edge cases.
-            - Whether the change stays inside the allowed paths (index.html,
-              data.js, serve.js, tests/, qa/, assets/, docs). Changes to
-              .github/, .claude/, hooks/, scripts/, or package files need a
-              person to sign off; call them out.
-            - Whether a new feature has a test in tests/ and whether every
-              existing test still has a reason to pass.
+            - Correctness bugs and missing edge cases. For a CSV export:
+              quoting of fields that contain commas or quotes, the header
+              row, one row per record.
+            - Whether a new feature has a test in tests/ (node:test files run
+              with `node --test tests/*.test.js`; Playwright specs run on CI) and
+              whether every existing test still has a reason to pass.
+            - Whether any existing test was edited to make it pass. Call
+              that out as Important.
+            - Changes to .github/, .claude/, hooks/, scripts/, or package
+              files need a person to sign off; call them out.
             - Anything a careful human reviewer would flag before approval.
 
             Leave short, specific comments on the lines that need attention.
@@ -60,5 +63,5 @@ jobs:
             no Important findings, start it with "Verdict: looks good".
             Otherwise start it with "Verdict: changes requested". Do not
             approve or request changes through the GitHub review UI; a
-            person does that at Gate 1.
+            person does that.
           claude_args: '--allowedTools "Read,Glob,Grep,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),mcp__github_inline_comment__*"'
