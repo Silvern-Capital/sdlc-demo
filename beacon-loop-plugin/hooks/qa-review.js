@@ -14,7 +14,6 @@ var fs = require("fs");
 var path = require("path");
 var cp = require("child_process");
 var crypto = require("crypto");
-var os = require("os");
 
 var MODE = process.env.BEACON_QA_STOP || "";
 if (MODE !== "1" && MODE !== "dry") process.exit(0);
@@ -67,11 +66,23 @@ changed.forEach(function (f) {
   if (fs.existsSync(p)) h.update(f + "\n" + fs.readFileSync(p, "utf8"));
 });
 var diffHash = h.digest("hex");
-var marker = path.join(os.tmpdir(), "beacon-qa-" + crypto.createHash("sha1").update(ROOT).digest("hex").slice(0, 12));
-if (fs.existsSync(marker) && fs.readFileSync(marker, "utf8").trim() === diffHash) process.exit(0);
+// The marker lives inside this repo's own git directory, not in a shared
+// temp folder, so nobody else can pre-create or redirect it.
+var gitDir = gitOut(ROOT, ["rev-parse", "--path-format=absolute", "--git-dir"]);
+if (!gitDir) process.exit(0);
+var marker = path.join(gitDir, "beacon-qa-reviewed");
+try {
+  if (fs.lstatSync(marker).isFile() && fs.readFileSync(marker, "utf8").trim() === diffHash) process.exit(0);
+} catch (e) { /* no marker yet */ }
+function markReviewed() {
+  try { if (fs.existsSync(marker) && !fs.lstatSync(marker).isFile()) fs.unlinkSync(marker); } catch (e) {}
+  fs.writeFileSync(marker, diffHash, { mode: 0o600 });
+}
 
-var prompt = "Review the current working-tree diff of this repo as QA. Changed app files: " +
-  changed.join(", ") + ". Use the running API on localhost:8000 if it answers, otherwise read data.js. " +
+// A fixed instruction. The agent finds the changed files itself with git
+// status, so nothing from the working tree is interpolated into the prompt.
+var prompt = "Review the current working-tree diff of this repo as QA. Run git status to see what changed. " +
+  "Use the running API on localhost:8000 if it answers, otherwise read data.js. " +
   "Report findings the way your instructions say and end with the closing line.";
 // Only what the qa agent needs: read the tree, run node one-liners and the
 // tests, look at the diff, and curl the local API. No bare Bash.
@@ -90,17 +101,21 @@ var childEnv = { BEACON_QA_STOP: "" };
 
 if (MODE === "dry") {
   process.stderr.write("qa-review (dry run): would run  claude " + args.slice(0, -1).join(" ") + " \"<prompt>\"\n  in " + ROOT + "\n  diff " + diffHash.slice(0, 12) + "\n");
-  fs.writeFileSync(marker, diffHash);
+  markReviewed();
   process.exit(0);
 }
 
-var run = cp.spawnSync("claude", args, { cwd: ROOT, encoding: "utf8", timeout: 170000, env: childEnv });
-fs.writeFileSync(marker, diffHash);
+var run = cp.spawnSync("claude", args, { cwd: ROOT, encoding: "utf8", timeout: 170000, killSignal: "SIGKILL", env: childEnv });
 var out = String(run.stdout || "") + String(run.stderr || "");
-if (run.error) {
-  process.stderr.write("qa-review: could not run the qa agent (" + run.error.message + "). Not blocking.\n");
+var completed = !run.error && run.status === 0 && /no blocking findings|\bblocking:/i.test(out);
+if (!completed) {
+  // Did not finish, timed out, or produced no verdict: do not mark the diff
+  // reviewed, so the next Stop tries again. Say so, without blocking.
+  var why = run.error ? run.error.message : ("exit " + run.status + ", no verdict line");
+  process.stderr.write("qa-review: the qa agent run did not complete (" + why + "). Not blocking; it will run again at the next stop.\n");
   process.exit(0);
 }
+markReviewed();
 if (/\bblocking:/i.test(out) && !/no blocking findings/i.test(out)) {
   process.stderr.write("QA (a separate claude -p --agent qa run) found a blocking issue in your change. Fix it before finishing; do not edit or skip a test to get past it.\n\n" + out.trim().slice(-3000) + "\n");
   process.exit(2);
