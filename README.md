@@ -31,7 +31,6 @@ Google Chrome you already have.
 ## What the workshop turns on
 
 - `CLAUDE.md` — conventions and what done means. It asks; it cannot enforce.
-- `.claude/hooks/hooks.json` — the two hook entries. Not wired at the start: step 5 of the workshop moves the test rule out of CLAUDE.md and runs `node scripts/enable_hooks.js`, which copies this block into `.claude/settings.json`.
 - `.claude/hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
 - `.claude/hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
 - `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
