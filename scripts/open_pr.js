@@ -55,6 +55,16 @@ function which(bin) {
   return !r.error && r.status === 0;
 }
 
+// The node test runner prints TAP; the PR only needs the failures and the
+// summary lines, not the per-test YAML.
+function tapSummary(out) {
+  var lines = String(out || "").split("\n");
+  var keep = lines.filter(function (l) {
+    return /^not ok /.test(l) || /^# (tests|suites|pass|fail|cancelled|skipped|todo)\b/.test(l);
+  });
+  return keep.length ? keep.join("\n") : lines.slice(-12).join("\n");
+}
+
 function slugify(s) {
   return String(s || "change").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32) || "change";
 }
@@ -90,7 +100,7 @@ function main() {
     "- [" + (tests.ok ? "x" : " ") + "] `node --test tests/*.test.js`",
     "",
     "```",
-    tests.out.split("\n").slice(-12).join("\n"),
+    tapSummary(tests.out),
     "```",
     "",
     "- [" + (lint.ok ? "x" : " ") + "] `node scripts/lint.js`",

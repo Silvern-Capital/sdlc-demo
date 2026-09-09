@@ -52,12 +52,15 @@ if command -v lsof >/dev/null 2>&1; then
 fi
 
 # 2. worktrees from step 8
+# claude --worktree locks its worktrees; unlock before removing.
 git worktree list --porcelain | awk '/^worktree /{print $2}' | while read -r wt; do
   if [ "$wt" != "$HERE" ]; then
+    git worktree unlock "$wt" 2>/dev/null || true
     git worktree remove --force "$wt" 2>/dev/null && echo "removed worktree $wt" || true
   fi
 done
 git worktree prune
+rm -rf "$HERE/.claude/worktrees"
 
 # 3. off any branch a run created (agent/... from open_pr.js, worktree-...
 # from claude --worktree), back to main, dropping whatever was left
@@ -71,7 +74,7 @@ case "$CURRENT" in
 esac
 
 # 4. local agent/* branches (pushed to the PR already; local copies are noise)
-git branch --list 'agent/*' 'worktree-*' | sed 's/^[* ]*//' | while read -r b; do
+git branch --list 'agent/*' 'worktree-*' | sed 's/^[*+ ]*//' | while read -r b; do
   [ -n "$b" ] && git branch -q -D "$b" && echo "deleted local branch $b"
 done
 
