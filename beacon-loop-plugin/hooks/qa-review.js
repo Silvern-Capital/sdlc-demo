@@ -73,7 +73,20 @@ if (fs.existsSync(marker) && fs.readFileSync(marker, "utf8").trim() === diffHash
 var prompt = "Review the current working-tree diff of this repo as QA. Changed app files: " +
   changed.join(", ") + ". Use the running API on localhost:8000 if it answers, otherwise read data.js. " +
   "Report findings the way your instructions say and end with the closing line.";
-var args = ["-p", "--agent", "qa", "--allowedTools", "Bash,Read", "--max-turns", "25", "--output-format", "text", prompt];
+// Only what the qa agent needs: read the tree, run node one-liners and the
+// tests, look at the diff, and curl the local API. No bare Bash.
+var ALLOWED_TOOLS = [
+  "Read", "Grep", "Glob",
+  "Bash(node:*)", "Bash(git diff:*)", "Bash(git status:*)",
+  "Bash(curl -sf http://localhost:8000/*)", "Bash(curl -s http://localhost:8000/*)",
+  "Bash(curl -sf localhost:8000/*)", "Bash(curl -s localhost:8000/*)"
+].join(",");
+var args = ["-p", "--agent", "qa", "--allowedTools", ALLOWED_TOOLS, "--max-turns", "25", "--output-format", "text", prompt];
+// A minimal environment for the child: enough to find claude and sign in,
+// nothing else from this process.
+var childEnv = { BEACON_QA_STOP: "" };
+["PATH", "HOME", "USER", "LANG", "TMPDIR", "SHELL", "ANTHROPIC_API_KEY", "CLAUDE_CONFIG_DIR", "ANTHROPIC_BASE_URL", "CLAUDE_CODE_OAUTH_TOKEN"]
+  .forEach(function (k) { if (process.env[k] !== undefined) childEnv[k] = process.env[k]; });
 
 if (MODE === "dry") {
   process.stderr.write("qa-review (dry run): would run  claude " + args.slice(0, -1).join(" ") + " \"<prompt>\"\n  in " + ROOT + "\n  diff " + diffHash.slice(0, 12) + "\n");
@@ -81,8 +94,7 @@ if (MODE === "dry") {
   process.exit(0);
 }
 
-var run = cp.spawnSync("claude", args, { cwd: ROOT, encoding: "utf8", timeout: 170000,
-  env: Object.assign({}, process.env, { BEACON_QA_STOP: "" }) });   // never recurse
+var run = cp.spawnSync("claude", args, { cwd: ROOT, encoding: "utf8", timeout: 170000, env: childEnv });
 fs.writeFileSync(marker, diffHash);
 var out = String(run.stdout || "") + String(run.stderr || "");
 if (run.error) {
