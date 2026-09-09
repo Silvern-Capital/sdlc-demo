@@ -583,20 +583,20 @@ red?  print it     exit 2  (Claude sees it)</pre></div>
     <div class="card purple">
       <span class="k">5c &#183; agent team &#183; 3 min</span>
       <h4>The test and the code have different owners</h4>
-      <p>Finance wants one more column. Two roles any team has: the tester (haiku: one assertion at a time) owns the tests and writes the failing one first; the builder (sonnet) owns the app code and fixes only what the tester sent.</p>
+      <p>Finance wants one more column, and this one is trivial on purpose: a <code>currency</code> column that says USD on every row. Two roles any team has: the tester (haiku) owns the tests and writes the failing assertion first; the builder (sonnet) owns the app code and changes one line. They message each other, not you. Make sure you are in auto mode first (Shift+Tab), because teammates inherit your permission mode and will stop to ask otherwise.</p>
       <p class="note">Want the two teammates in split panes? Set <code>"teammateMode": "tmux"</code> in <code>.claude/settings.json</code>, then start Claude inside a fresh tmux session. If an old one is around, clear it first (this closes every tmux session on the machine):</p>
       <div class="prompt cmd">tmux kill-server</div>
       <div class="prompt cmd">tmux new -s beacon</div>
       <div class="prompt cmd">claude</div>
       <div class="prompt">Spawn two teammates: one using the tester agent type,
   one using the builder agent type.
-Finance wants an avgRunRate7d column in the CSV export.
-The tester writes the test first and sends each failure
-  directly to the builder; the builder fixes csv.js and replies.
-Repeat until green, then the tester reports the final test
-  output and the number of round trips to me.
+Finance wants a ninth column in the CSV export, currency,
+  with the value USD on every row.
+The tester writes the failing test first and sends the
+  assertion straight to the builder; the builder changes
+  csv.js and replies. Do not ask me anything; report when green.
 Only csv.js and tests/csv.test.js may change.</div>
-      <p>Watch for the first message between them: a red assertion, not a plan. Then <code>git diff --stat</code>: in rehearsal the builder reached into data.js to satisfy the test, outside the ticket&#8217;s two files. The ownership rule held; the scope rule is yours to check.</p>
+      <p>Watch for the first message between them: a red assertion, not a plan. One round trip, under two minutes. Then <code>git diff --stat</code> should show exactly two files.</p>
     </div>
   </div>
 </section>
