@@ -37,15 +37,6 @@
             "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/stop-check.js\""
           }
         ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/qa-review.js\"",
-            "timeout": 180
-          }
-        ]
       }
     ]
   }
