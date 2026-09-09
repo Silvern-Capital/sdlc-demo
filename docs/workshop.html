@@ -1,0 +1,794 @@
+<title>Beacon Loop Workshop</title>
+<!-- participant copy: facilitator notes stripped -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=Poppins:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ivory:#FAF9F5; --slate:#141413;
+  --g150:#F0EEE6; --g250:#DEDCD1; --g400:#B0AEA5; --g600:#6B6963;
+  --clay:#D97757; --mineral:#629987; --cactus:#788C5D; --plum:#827DBD; --heather:#CBCADB;
+  --bg:var(--ivory); --card:var(--g150); --card2:#FFFFFF; --line:var(--g250);
+  --ink:var(--slate); --dim:var(--g600); --dim2:var(--g400);
+  --red:var(--clay); --red-soft:#F6E3DA; --green:var(--mineral); --green-soft:#DFEDE7;
+  --purple:var(--plum); --purple-soft:#E6E5F2; --olive:var(--cactus);
+  --term-bg:#1F1E1B; --term-fg:#F0EEE6;
+  --fd:"Lora",Georgia,"Times New Roman",serif;
+  --fs:"Poppins",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141413; --card:#1F1E1B; --card2:#262522; --line:#35342F;
+    --ink:#F0EEE6; --dim:#B0AEA5; --dim2:#7E7C75;
+    --red-soft:#3A2820; --green-soft:#1E2F29; --purple-soft:#27263A;
+    --term-bg:#0E0E0D; --term-fg:#F0EEE6;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141413; --card:#1F1E1B; --card2:#262522; --line:#35342F;
+  --ink:#F0EEE6; --dim:#B0AEA5; --dim2:#7E7C75;
+  --red-soft:#3A2820; --green-soft:#1E2F29; --purple-soft:#27263A;
+  --term-bg:#0E0E0D; --term-fg:#F0EEE6;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fs);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:40px 24px 90px}
+h1,h2{font-family:var(--fd);font-weight:500;letter-spacing:-.02em;text-wrap:balance;margin:0}
+h1{font-size:44px;line-height:1.08}
+h2{font-size:30px;line-height:1.15}
+h3{font-family:var(--fs);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+p{margin:0 0 12px;max-width:72ch}
+a{color:var(--red)}
+code{font-family:var(--fm);font-size:.88em;background:var(--card);padding:1px 6px;border-radius:5px;color:var(--ink)}
+
+.head{padding-bottom:26px;border-bottom:2px solid var(--ink);margin-bottom:34px}
+.head .eyebrow{font-family:var(--fm);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.head .sub{font-size:19px;color:var(--dim);max-width:60ch;margin:14px 0 0;line-height:1.45}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-size:13px;color:var(--dim)}
+.meta b{color:var(--ink);font-weight:600}
+
+figure{margin:0}
+figure svg{display:block;width:100%;height:auto;max-width:100%}
+figcaption{font-size:13px;color:var(--dim);margin-top:8px;max-width:80ch}
+.figwrap{overflow-x:auto}
+svg text{font-family:var(--fs)}
+svg .mono{font-family:var(--fm)}
+svg .box{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+svg .box.hi{stroke:var(--ink);stroke-width:2}
+svg .box.red{fill:var(--red-soft);stroke:var(--red)}
+svg .box.green{fill:var(--green-soft);stroke:var(--green)}
+svg .box.purple{fill:var(--purple-soft);stroke:var(--purple)}
+svg .box.you{fill:var(--card2);stroke:var(--ink);stroke-dasharray:5 4}
+svg .t{fill:var(--ink);font-size:15px;font-weight:600}
+svg .s{fill:var(--dim);font-size:12.5px}
+svg .r{fill:var(--red);font-size:12px;font-weight:600}
+svg .g{fill:var(--green);font-size:12px;font-weight:600}
+svg .pu{fill:var(--purple);font-size:12px;font-weight:600}
+svg .arr{stroke:var(--dim2);stroke-width:1.8;fill:none;marker-end:url(#ah)}
+svg .arr.red{stroke:var(--red);marker-end:url(#ahr)}
+svg .arr.green{stroke:var(--green);marker-end:url(#ahg)}
+svg .arr.purple{stroke:var(--purple);marker-end:url(#ahp)}
+svg .arr.both{marker-start:url(#ahp);marker-end:url(#ahp);stroke:var(--purple)}
+
+.route{display:grid;grid-template-columns:repeat(11,1fr);gap:6px;margin:22px 0 6px}
+.route a{display:flex;flex-direction:column;gap:4px;padding:10px 8px;background:var(--card);border-radius:10px;text-decoration:none;color:var(--ink);min-height:82px;border:1px solid transparent}
+.route a:hover{border-color:var(--ink)}
+.route .n{font-family:var(--fm);font-size:11px;color:var(--red)}
+.route .l{font-size:12px;font-weight:600;line-height:1.25}
+.route .m{font-size:11px;color:var(--dim);margin-top:auto}
+@media (max-width:900px){.route{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:520px){.route{grid-template-columns:repeat(2,1fr)}}
+
+.step{margin-top:56px;padding-top:26px;border-top:1px solid var(--line)}
+.step-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:12px;font-family:var(--fm);font-size:12px;color:var(--dim)}
+.step-meta .num{color:var(--red);font-weight:500;letter-spacing:.08em}
+.step-meta .ep{background:var(--card);border-radius:999px;padding:3px 11px;color:var(--ink)}
+.step-meta .min{margin-left:auto;color:var(--dim2)}
+.step h2{margin-bottom:10px}
+.idea{font-size:17px;color:var(--dim);max-width:64ch;margin-bottom:22px}
+.idea b{color:var(--ink);font-weight:600}
+
+.two{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:start;margin:18px 0}
+.two>*,.files>*,.cards>*,.cond>*,.take>*{min-width:0}
+.two.verify{grid-template-columns:0.8fr 1.2fr}
+.two.even{grid-template-columns:1fr 1fr}
+@media (max-width:900px){.two,.two.even,.two.verify{grid-template-columns:1fr}}
+
+.do,.see{background:var(--card);border-radius:16px;padding:16px 18px 14px}
+.do h3::before{content:"› ";color:var(--red)}
+.see h3::before{content:"◉ ";color:var(--green)}
+.prompt{font-family:var(--fm);font-size:13px;line-height:1.6;background:var(--card2);border-radius:10px;padding:12px 14px;margin:8px 0 10px;white-space:pre-wrap;overflow-wrap:break-word;color:var(--ink);border:1px solid var(--line);font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+.prompt.cmd::before{content:"! ";color:var(--green)}
+.prompt.term::before{content:"terminal ▸ ";color:var(--muted);font-size:.85em;letter-spacing:.04em}
+.prompt.slash{border-left:3px solid var(--red)}
+.note{font-size:13px;color:var(--dim);margin:0 0 8px}
+.see ul{margin:6px 0 0;padding-left:18px}
+.see li{margin-bottom:7px;font-size:14.5px}
+.see li b{font-weight:600}
+.why{font-family:var(--fd);font-size:17px;line-height:1.45;color:var(--ink);margin:14px 0 0;padding-left:14px;border-left:3px solid var(--red)}
+.check{display:flex;gap:10px;align-items:flex-start;background:var(--green-soft);border-radius:12px;padding:10px 14px;margin:12px 0 0;font-size:14px}
+.check b{color:var(--green);font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;padding-top:3px}
+
+.term{background:var(--term-bg);color:var(--term-fg);border-radius:14px;font-family:var(--fm);font-size:12px;line-height:1.6;overflow:hidden;margin:10px 0}
+.term .bar{display:flex;gap:6px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.term .bar i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22);display:block}
+.term pre{margin:0;padding:12px 16px;white-space:pre;overflow-x:auto;font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+.term .red{color:#F0A184}.term .grn{color:#8FC7B1}.term .dim{color:#8B8A83}.term .pur{color:#B9B5DE}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.cards.three{grid-template-columns:repeat(3,1fr)}
+.cards.two4{grid-template-columns:repeat(2,1fr)}
+@media (max-width:820px){.cards,.cards.three{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.cards,.cards.three,.cards.two4{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.card .k{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.card h4{margin:0;font-size:16px;font-weight:600;line-height:1.3}
+.card p{margin:0;font-size:14px;color:var(--dim)}
+.card p b{color:var(--ink)}
+.card.purple{background:var(--purple-soft)}
+.card.purple .k{color:var(--purple)}
+.chip{display:inline-block;font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.06em;padding:2px 8px;border-radius:5px;vertical-align:middle}
+.chip.fail{background:var(--red);color:#fff}
+.chip.pass{background:var(--green);color:#fff}
+
+.cond{display:grid;grid-template-columns:1fr 1.4fr;gap:14px;margin:14px 0;align-items:start}
+@media (max-width:760px){.cond{grid-template-columns:1fr}}
+.cond .c{border-radius:16px;padding:16px 18px}
+.cond .weak{background:var(--red-soft)}
+.cond .strong{background:var(--green-soft)}
+.cond h3{margin-bottom:10px}
+.cond .weak h3{color:var(--red)}.cond .strong h3{color:var(--green)}
+.parts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 0}
+@media (max-width:640px){.parts{grid-template-columns:repeat(2,1fr)}}
+.parts div{background:var(--card2);border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.4;border:1px solid var(--line)}
+.parts b{display:block;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:3px}
+.never{margin:14px 0 0;background:var(--card);border-radius:16px;padding:14px 18px}
+.never h3{color:var(--red)}
+.never ul{margin:0;padding-left:18px;columns:2;column-gap:28px}
+.never li{font-size:14px;margin-bottom:6px;break-inside:avoid}
+@media (max-width:640px){.never ul{columns:1}}
+
+.files{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media (max-width:900px){.files,.files.wide2{grid-template-columns:1fr}}
+.file{background:var(--card);border-radius:16px;overflow:hidden}
+.file .fh{display:flex;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.file .fh code{background:none;padding:0;font-size:12.5px}
+.file .fh span{color:var(--dim);font-size:12.5px}
+.file pre{margin:0;padding:12px 16px;font-family:var(--fm);font-size:12px;line-height:1.65;white-space:pre;overflow-x:auto;color:var(--ink);font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+.files.wide2{grid-template-columns:1fr 1.7fr}
+.file pre .c{color:var(--dim2)}.file pre .r{color:var(--red)}.file pre .g{color:var(--green)}.file pre .p{color:var(--purple)}
+.file pre .ann{color:var(--red);font-style:italic}
+.file.wide{margin:14px 0}
+
+.tbl{border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:14px 0}
+.tbl .scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:9px 12px;background:var(--card);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+tr:last-child td{border-bottom:none}
+td.k{font-weight:600;white-space:nowrap}
+td.zero{color:var(--green);font-weight:600}
+td.high{color:var(--red);font-weight:600}
+td .keep{color:var(--green);font-weight:600}
+td .re{color:var(--purple);font-weight:600}
+td .del{color:var(--red);font-weight:600}
+td .new{color:var(--olive);font-weight:600}
+
+.take{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+@media (max-width:760px){.take{grid-template-columns:1fr}}
+.take div{background:var(--card);border-radius:16px;padding:20px 20px 18px}
+.take .n{font-family:var(--fm);color:var(--red);font-size:12px;letter-spacing:.1em;margin-bottom:8px}
+.take h4{font-family:var(--fd);font-weight:500;font-size:21px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+.take p{font-size:14px;color:var(--dim);margin:0}
+
+details{margin:12px 0 0;background:var(--card);border-radius:12px;padding:10px 16px}
+summary{cursor:pointer;font-size:14px;font-weight:600}
+details p,details li{font-size:14px;color:var(--dim)}
+details ul{padding-left:18px;margin:8px 0 4px}
+.fac{margin-top:56px;padding:14px 20px;border:2px dashed var(--purple);border-radius:16px}
+.fac details{background:none;padding:0;margin:0}
+.fac summary{color:var(--purple)}
+.fac h3{color:var(--purple)}
+.foot{margin-top:50px;padding-top:16px;border-top:1px solid var(--ink);font-size:13px;color:var(--dim)}
+.foot p{margin:0 0 6px}
+@media (max-width:900px){.files.wide2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <div class="eyebrow">Hands-on workshop &#183; Claude Code</div>
+  <h1>The agent builds it. The checks hold. You keep the merge.</h1>
+  <p class="sub">One ticket: finance wants a CSV export of the Beacon dashboard. You build it with Claude Code. The point is not the button. The point is what catches Claude&#8217;s mistakes, and that it is never you.</p>
+  <div class="meta">
+    <span><b>Before you start</b> Node 20+, <code>gh auth status</code>, Chrome installed</span>
+    <span><b>How to read the blocks</b> lines starting with <code>!</code> are shell commands: paste them into Claude exactly as shown, Claude Code runs them. Lines marked <em>terminal</em> go in a terminal window, never inside Claude. Everything else is a message to Claude.</span>
+    <span><b>Time</b> 45 minutes, ten steps, five to spare</span>
+    <span><b>You will write</b> one goal, two hooks</span>
+  </div>
+</header>
+<figure>
+<div class="figwrap">
+<svg viewBox="0 0 1100 300" role="img" aria-label="You state the ask and what done means; Claude builds and runs checks; a red check goes back to Claude; a green one goes on to a pull request that you approve.">
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#B0AEA5"/></marker>
+<marker id="ahr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#D97757"/></marker>
+<marker id="ahg" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#629987"/></marker>
+<marker id="ahp" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#827DBD"/></marker>
+</defs>
+<rect class="box you" x="20" y="90" width="150" height="90" rx="14"/>
+<text class="t" x="95" y="126" text-anchor="middle">You</text>
+<text class="s" x="95" y="146" text-anchor="middle">the ticket, and</text>
+<text class="s" x="95" y="162" text-anchor="middle">what done means</text>
+<rect class="box hi" x="240" y="75" width="200" height="120" rx="14"/>
+<text class="t" x="340" y="110" text-anchor="middle">Claude</text>
+<text class="s" x="340" y="132" text-anchor="middle">writes the test first</text>
+<text class="s" x="340" y="149" text-anchor="middle">builds Export CSV</text>
+<text class="s" x="340" y="166" text-anchor="middle">runs the checks</text>
+<rect class="box" x="495" y="60" width="270" height="170" rx="14"/>
+<text class="t" x="630" y="90" text-anchor="middle">Checks</text>
+<text class="s mono" x="512" y="116">hook &#183; tests on every edit</text>
+<text class="s mono" x="512" y="136">hook &#183; tests + lint at Stop</text>
+<text class="s mono" x="512" y="156">subagent &#183; told to refute</text>
+<text class="s mono" x="512" y="176">CI &#183; node + browser suite</text>
+<text class="s mono" x="512" y="196">reviews &#183; code + security</text>
+<text class="s mono" x="512" y="216">/verify &#183; click it for real</text>
+<rect class="box green" x="810" y="90" width="120" height="90" rx="14"/>
+<text class="t" x="870" y="128" text-anchor="middle">Pull request</text>
+<text class="s" x="870" y="148" text-anchor="middle">with the proof</text>
+<rect class="box you" x="965" y="90" width="115" height="90" rx="14"/>
+<text class="t" x="1022" y="128" text-anchor="middle">You</text>
+<text class="s" x="1022" y="148" text-anchor="middle">approve</text>
+<path class="arr" d="M170 135 H238"/>
+<path class="arr" d="M440 135 H493"/>
+<path class="arr green" d="M765 135 H808"/>
+<text class="g" x="786" y="124" text-anchor="middle">green</text>
+<path class="arr green" d="M930 135 H963"/>
+<path class="arr red" d="M630 230 V252 H340 V197"/>
+<text class="r" x="483" y="272" text-anchor="middle">red goes back to Claude, not to you</text>
+</svg>
+</div>
+<figcaption>You are needed twice: at the start, to say what done means, and at the end, to approve. Everything in between runs on its own.</figcaption>
+</figure>
+    <h3 style="margin-top:30px">The route</h3>
+<div class="route">
+  <a href="#s1"><span class="n">01</span><span class="l">The repo and the ticket</span><span class="m">2 min</span></a>
+  <a href="#s2"><span class="n">02</span><span class="l">CLAUDE.md, the note</span><span class="m">3 min</span></a>
+  <a href="#s3"><span class="n">03</span><span class="l">Write the finish line</span><span class="m">4 min</span></a>
+  <a href="#s4"><span class="n">04</span><span class="l">Red before the code exists</span><span class="m">3 min</span></a>
+  <a href="#s5"><span class="n">05</span><span class="l">Two hooks</span><span class="m">6 min</span></a>
+  <a href="#s6"><span class="n">06</span><span class="l">Skill, subagent, agent team</span><span class="m">6 min</span></a>
+  <a href="#s7"><span class="n">07</span><span class="l">PR, CI, reviews, worktree</span><span class="m">8 min</span></a>
+  <a href="#s8"><span class="n">08</span><span class="l">/verify</span><span class="m">3 min</span></a>
+  <a href="#s9"><span class="n">09</span><span class="l">Ship it as a plugin</span><span class="m">3 min</span></a>
+  <a href="#s10"><span class="n">10</span><span class="l">Take home</span><span class="m">2 min</span></a>
+</div>
+<p class="note">Ten steps in 40 minutes, five minutes slack. Three terminals over the session: A for the server, B for Claude, C for the worktree and the second repo. The goal in step 3 keeps running while you read steps 4 and 5.</p>
+
+<!-- ============================================================ 01 -->
+<section class="step" id="s1">
+  <div class="step-meta"><span class="num">STEP 01</span><span class="ep">the repo</span><span class="min">2 min</span></div>
+  <h2>Beacon, and the ticket.</h2>
+  <p class="idea">A site-health dashboard: six sites, an API, ten tests, no export. <b>Finance wants a CSV they can open in Excel.</b> That is the ticket.</p>
+  <div class="two">
+    <div class="do">
+      <h3>Do this</h3>
+      <p class="note">Terminal A. Leave the server running there for the whole workshop.</p>
+      <div class="prompt term">git clone https://github.com/Silvern-Capital/sdlc-demo.git &amp;&amp; cd sdlc-demo &amp;&amp; npm install &amp;&amp; npm run serve</div>
+      <p class="note">Terminal B. This is where you stay from now on.</p>
+      <div class="prompt term">cd sdlc-demo &amp;&amp; claude</div>
+      <div class="prompt cmd">curl -s localhost:8000/api/stores | head -c 400</div>
+      <div class="prompt cmd">node --test tests/*.test.js</div>
+      <p class="note">Open <code>localhost:8000</code> in your browser. Two tests, green, under a second.</p>
+    </div>
+    <div class="see">
+      <h3>Before you type anything into Claude</h3>
+      <p>Hand Claude the ticket, walk away ten minutes, come back to &#8220;done, tests pass&#8221;. What could be wrong that nobody notices?</p>
+      <ul>
+        <li>A column is missing.</li>
+        <li>A name with a comma splits into two cells.</li>
+        <li>Five rows instead of six.</li>
+        <li>A failing test marked skipped.</li>
+      </ul>
+      <p class="why">Each is easy to catch with a check. None is caught by asking Claude to be careful. This workshop builds the checks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 02 -->
+<section class="step" id="s2">
+  <div class="step-meta"><span class="num">STEP 02</span><span class="ep">CLAUDE.md</span><span class="min">3 min</span></div>
+  <h2>CLAUDE.md asks. It cannot enforce.</h2>
+  <p class="idea">Claude reads this file at the start of every session. Every rule in it is a sentence Claude has to remember.</p>
+  <div class="do">
+    <h3>Do this</h3>
+    <div class="prompt cmd">cat CLAUDE.md</div>
+  </div>
+  <div class="file wide"><div class="fh"><code>CLAUDE.md</code><span>the whole file, about 30 lines</span></div><pre># Beacon &#183; Site Health
+
+Internal IT-Ops dashboard for the Silvern Capital site fleet. Static page,
+no build step. `npm run serve` serves it on :8000 with the API at /api/stores.
+
+## Conventions
+- Plain ES5 inside &lt;script&gt;: var and function expressions, no modules.
+- Status vocabulary is fixed: "ok" | "warn" | "down".
+- window.STORES (from data.js) is the single source of truth. Read it,
+  never mutate it.
+- Colors come from the :root custom properties in index.html.
+
+## What done means, for any change
+- A test in tests/ asserts the new behavior. Write it first; watch it fail.
+- Run `node --test tests/*.test.js` after every change; it reports 0 failing.  <span class="ann">← already a hook. You delete this line in step 5.</span>
+- `node scripts/lint.js` reports 0 warnings.   <span class="ann">← already a hook. You delete this line in step 5.</span>
+- Never edit an existing test to make it pass.   <span class="ann">← stays. Step 3 also puts it in the goal.</span>
+- Paste the test and lint output in your final
+  message, do not summarize it.
+
+## Workshop mode
+This repo is used for a hands-on workshop. Treat every feature request as a
+first-time implementation; do not look for, mention, or defer to earlier
+branches or pull requests for the same feature.</pre></div>
+  <div class="two">
+    <div class="do">
+      <h3>Then ask Claude</h3>
+      <div class="prompt">Read CLAUDE.md. Which of these rules could a program check, and which need a person&#8217;s judgment?</div>
+      <p class="note">Expect: tests, lint, &#8220;never edit a test&#8221; and &#8220;paste the output&#8221; are checkable. The style rules need a person. A rule a program can check should be a check. Step 5 shows two that already are.</p>
+    </div>
+    <div class="see">
+      <h3>Why the file is short</h3>
+      <p>Every line here is paid on every task, whether it applies or not. So it holds only what is always true. Checks live elsewhere, where they cost nothing and cannot be skipped:</p>
+    </div>
+  </div>
+  <div class="tbl"><div class="scroll"><table>
+    <tr><th>Where you put it</th><th>What Claude pays</th></tr>
+    <tr><td class="k">CLAUDE.md</td><td class="high">the whole file, every session</td></tr>
+    <tr><td class="k">an MCP server</td><td class="high">every tool&#8217;s name and schema, every session, used or not. Why this workshop leaves MCP out</td></tr>
+    <tr><td class="k">a skill</td><td>one line every session, the body only when used</td></tr>
+    <tr><td class="k">a subagent</td><td>one line; its work happens in its own context</td></tr>
+    <tr><td class="k">a hook</td><td class="zero">nothing, until it finds something wrong</td></tr>
+    <tr><td class="k">the status line</td><td class="zero">nothing, ever. That dollar figure at the bottom of your terminal</td></tr>
+  </table></div></div>
+</section>
+
+<!-- ============================================================ 03 -->
+<section class="step" id="s3">
+  <div class="step-meta"><span class="num">STEP 03</span><span class="ep">/goal</span><span class="min">4 min</span></div>
+  <h2>Give Claude the finish line, not the steps.</h2>
+  <p class="idea">A prompt says what to do. A goal says what must be true when Claude stops, and a second model checks it after every turn. <b>If you cannot write that sentence, you have not decided what done means.</b></p>
+  <div class="cond">
+    <div class="c weak">
+      <h3>What you would normally type</h3>
+      <p class="note"><em>&#8220;Add a CSV export button to the dashboard.&#8221;</em> Do not type it. No end state, no check, nothing off limits. Claude says it works and nothing can disagree.</p>
+    </div>
+    <div class="c strong">
+      <h3>Do this instead: Shift+Tab into auto mode, then paste as one message</h3>
+      <div class="prompt slash">/goal The dashboard header has an "Export CSV" button that
+downloads beacon-sites.csv. The CSV text comes from a new file
+csv.js that exposes window.toCsv(stores): a header row
+  id,name,region,fillRate,
+  posStatus,netStatus,openTickets,daysOfSupply
+and one row per site, values equal to the data.
+
+A new test tests/csv.test.js (node:test, no browser) loads data.js
+and csv.js the way tests/data.test.js does, parses
+toCsv(window.STORES) as CSV and asserts all of that.
+  Write the test first. Then write csv.js as a stub whose toCsv
+  returns an empty string, run the test, and show me the
+  assertion failing before you write the real export or touch
+  index.html.
+
+Done means `node --test tests/*.test.js` reports 0 failing,
+  `node scripts/lint.js` reports 0 warnings,
+  and the qa agent reports no blocking findings,
+  all three pasted in your final message each turn.
+
+Only index.html, csv.js and the new test file may change.
+Stop after 8 turns and report what still fails.
+Do not commit, branch, or push.</div>
+      <div class="parts">
+        <div><b>End state</b>a button, a file, named columns, one row per site</div>
+        <div><b>The check</b>two commands and QA, output pasted every turn</div>
+        <div><b>Off limits</b>three files may change</div>
+        <div><b>Stopping point</b>eight turns</div>
+      </div>
+    </div>
+  </div>
+  <div class="never">
+    <h3>The shortcuts, and what catches each</h3>
+    <ul>
+      <li><b>Edit the test so it passes.</b> Only three files may change; the diff shows a fourth.</li>
+      <li><b>Hard-code six rows.</b> The test compares with the data, not a number.</li>
+      <li><b>Skip a failing test.</b> The pasted count shows fewer tests.</li>
+      <li><b>Call a failure unrelated and stop.</b> The Stop hook sends it back.</li>
+    </ul>
+  </div>
+  <div class="see" style="margin-top:14px">
+    <h3>You should see</h3>
+    <ul>
+      <li>Claude starts with the test, not the button.</li>
+      <li>After each turn: <span class="chip fail">not yet met</span> and a reason. Ctrl+O shows it in full:</li>
+    </ul>
+    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="red">not yet met</span>  csv.js exports the right header, but the final message
+             describes the test run instead of pasting it.</pre></div>
+    <p class="note"><code>/goal</code> on its own shows the condition, turns and spend. Let it run; read steps 4 and 5 while it works.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 04 -->
+<section class="step" id="s4">
+  <div class="step-meta"><span class="num">STEP 04</span><span class="ep">tests first</span><span class="min">3 min</span></div>
+  <h2>Watch the test fail before the code exists.</h2>
+  <p class="idea">A test that has only ever passed proves nothing. Maybe it checks the export; maybe it checks nothing and passes anyway. So the goal makes Claude do it in this order: write the test, write a fake export that returns nothing, run the test, show you the failure. Then write the real thing.</p>
+  <div class="two even">
+    <div>
+      <h3>What to watch for in Claude&#8217;s output</h3>
+      <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre>$ node --test tests/*.test.js
+
+<span class="red">not ok 1</span> - toCsv matches window.STORES
+    Expected values to be strictly deep-equal:
+    <span class="red">+ undefined</span>
+    - [ 'id', 'name', 'region', 'fillRate', ...
+ok 2 - data.js exposes six sites with valid statuses
+ok 3 - site ids are unique
+# tests 3  # pass 2  <span class="red"># fail 1</span></pre></div>
+      <p class="note">The new test red, the two old ones green. Claude may write more than one case, so the counts will differ; the red line is what matters: what the test expected (a header row) and what it got (nothing).</p>
+    </div>
+    <div>
+      <h3>Two reds, only one counts</h3>
+      <ul>
+        <li><b>&#8220;Cannot find module csv.js&#8221;</b>: the test crashed before it checked anything. Proves nothing. If you see this, ask Claude for the stub.</li>
+        <li><b>&#8220;Expected a header row, got undefined&#8221;</b>: the test ran, compared, and caught a wrong answer. This is the one you want.</li>
+        <li><b>Green on the first run</b>: stop and ask why. A test that cannot fail is not a test.</li>
+      </ul>
+      <div class="check"><b>checkpoint</b><span>You saw the test fail on a wrong answer before the real export existed. From here on, its green means something.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 05 -->
+<section class="step" id="s5">
+  <div class="step-meta"><span class="num">STEP 05</span><span class="ep">hooks</span><span class="min">6 min</span></div>
+  <h2>Two of those rules are already hooks. Delete them from the note together.</h2>
+  <p class="idea">While the goal ran, the tests ran after every edit and again when Claude said done. Not because the note asked. Two hooks did it: small programs Claude Code runs at a fixed point, whether Claude remembers or not.</p>
+  <figure>
+  <div class="figwrap">
+  <svg viewBox="0 0 1100 230" role="img" aria-label="Claude edits a file; the PostToolUse hook runs that file's tests; exit 2 sends the failure back into Claude's context; exit 0 is silent.">
+  <rect class="box hi" x="20" y="70" width="190" height="90" rx="14"/>
+  <text class="t" x="115" y="108" text-anchor="middle">Claude edits</text>
+  <text class="s mono" x="115" y="128" text-anchor="middle">csv.js</text>
+  <rect class="box" x="290" y="70" width="230" height="90" rx="14"/>
+  <text class="t" x="405" y="100" text-anchor="middle">PostToolUse hook</text>
+  <text class="s mono" x="405" y="120" text-anchor="middle">.claude/hooks/test-changed.js</text>
+  <text class="s" x="405" y="140" text-anchor="middle">only for app files</text>
+  <rect class="box" x="600" y="70" width="200" height="90" rx="14"/>
+  <text class="t" x="700" y="108" text-anchor="middle">node --test tests/*.test.js</text>
+  <text class="s" x="700" y="128" text-anchor="middle">under a second</text>
+  <rect class="box green" x="880" y="30" width="200" height="60" rx="14"/>
+  <text class="g" x="980" y="55" text-anchor="middle">exit 0 &#183; green</text>
+  <text class="s" x="980" y="74" text-anchor="middle">silence, zero tokens</text>
+  <rect class="box red" x="880" y="140" width="200" height="60" rx="14"/>
+  <text class="r" x="980" y="165" text-anchor="middle">exit 2 &#183; red</text>
+  <text class="s" x="980" y="184" text-anchor="middle">stderr into Claude&#8217;s context</text>
+  <path class="arr" d="M210 115 H288"/>
+  <path class="arr" d="M520 115 H598"/>
+  <path class="arr green" d="M800 105 H878 V60"/>
+  <path class="arr red" d="M800 125 H840 V170 H878"/>
+  <path class="arr red" d="M980 200 V220 H115 V162"/>
+  <text class="r" x="547" y="216" text-anchor="middle">Expected 8 columns, received 7 &#183; Claude fixes it and the hook runs again</text>
+  </svg>
+  </div>
+  <figcaption>Edit, test, red goes back to Claude, green is silence.</figcaption>
+  </figure>
+  <div class="two">
+    <div class="do">
+      <h3>Do this, once the goal has finished</h3>
+      <div class="prompt cmd">cat .claude/settings.json .claude/hooks/test-changed.js .claude/hooks/stop-check.js</div>
+      <div class="prompt">In CLAUDE.md, delete the two lines under "What done means" that ask for node --test and node scripts/lint.js. Nothing else.</div>
+      <div class="prompt">In csv.js, drop the region column from the export. Do not touch the test. Then do whatever the hook tells you.</div>
+    </div>
+    <div class="see">
+      <h3>You should see</h3>
+      <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="dim">right after the csv.js edit, without anyone asking:</span>
+node --test tests/*.test.js is red after your edit to csv.js.
+<span class="red">not ok 1</span> - toCsv matches window.STORES
+      [ 'id', 'name', <span class="red">-   'region',</span> 'fillRate', ...</pre></div>
+      <ul>
+        <li><b>The lines are gone and the tests ran anyway.</b> The hook runs on the event, not on memory.</li>
+        <li>Claude puts the column back. Silence. Green costs nothing.</li>
+      </ul>
+      <div class="check"><b>checkpoint</b><span>A rule a program can check is a check, not a sentence. You deleted the sentence; the check kept running.</span></div>
+    </div>
+  </div>
+  <div class="files">
+    <div class="file"><div class="fh"><code>.claude/settings.json</code><span>when</span></div><pre>after any edit          →  run test-changed.js
+when Claude says done   →  run stop-check.js</pre></div>
+    <div class="file"><div class="fh"><code>.claude/hooks/test-changed.js</code><span>what</span></div><pre>not an app file?   exit 0  (silent, free)
+run the tests
+red?  print it     exit 2  (Claude sees it)</pre></div>
+  </div>
+  <h3 style="margin-top:22px">Who decides in a hook</h3>
+  <ul>
+    <li><b>A script</b> (<code>command</code>; <code>http</code> and <code>mcp_tool</code> are the same idea). Free, instant, same answer every time. Anything with a pass line. Both of ours.</li>
+    <li><b>One model call</b> (<code>prompt</code>). Yes or no from a fast model. Reading jobs: &#8220;did the message paste the output or describe it?&#8221;</li>
+    <li><b>A small agent</b> (<code>agent</code>, experimental). Looks before answering. Only when a check needs evidence: &#8220;is there a test for every branch in this diff?&#8221;</li>
+  </ul>
+  <p class="note">Start with scripts. A model judge costs per event and can be talked into a yes.</p>
+  <h3 style="margin-top:22px">The number at the bottom of your terminal</h3>
+  <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="grn">Sonnet &#183; $0.41 &#183; 23% context &#183; +58 / -0 lines</span></pre></div>
+  <p class="note">Not a hook: a script Claude Code runs after every message and prints. Zero tokens. The dollar figure is an estimate at list price. Watch the percentage climb as Claude reads test output, and the dollars jump when a subagent runs.</p>
+</section>
+
+<!-- ============================================================ 06 -->
+<!-- ============================================================ 06 -->
+<section class="step" id="s6">
+  <div class="step-meta"><span class="num">STEP 06</span><span class="ep">skill</span><span class="ep">subagent</span><span class="ep">agent team</span><span class="min">6 min</span></div>
+  <h2>Same check, three places to run it.</h2>
+  <p class="idea">A skill runs in your session. A subagent runs in its own context and hands back a verdict. A team gives the test and the code different owners.</p>
+  <figure>
+  <div class="figwrap">
+  <svg viewBox="0 0 1650 400" role="img" aria-label="Three panels: a skill loads into your session's context and grades work it can see; an agent team gives the test and the code different owners; a subagent runs in a separate, fresh context that sees only the export and the API, is told to refute, and returns one paragraph.">
+  <text class="t" x="20" y="24">Skill</text>
+  <text class="s mono" x="20" y="42">/pr-ready</text>
+  <rect class="box hi" x="20" y="60" width="440" height="250" rx="14"/>
+  <text class="s" x="240" y="86" text-anchor="middle">your session&#8217;s context window</text>
+  <rect class="box" x="40" y="100" width="400" height="34" rx="8"/><text class="s mono" x="240" y="122" text-anchor="middle">CLAUDE.md</text>
+  <rect class="box" x="40" y="142" width="400" height="34" rx="8"/><text class="s mono" x="240" y="164" text-anchor="middle">the whole conversation that built csv.js</text>
+  <rect class="box purple" x="40" y="184" width="400" height="50" rx="8"/><text class="pu" x="240" y="205" text-anchor="middle">SKILL.md loaded here</text><text class="s" x="240" y="223" text-anchor="middle">the pre-PR checklist, run by you</text>
+  <rect class="box" x="40" y="242" width="400" height="34" rx="8"/><text class="s mono" x="240" y="264" text-anchor="middle">the CSV, the API JSON</text>
+  <text class="s" x="240" y="335" text-anchor="middle">Same eyes, same context. Cheap. Grades its own work.</text>
+  <text class="s" x="240" y="352" text-anchor="middle">Its description costs one line every session; the body only when used.</text>
+
+  <text class="t" x="540" y="24">Subagent</text>
+  <text class="s mono" x="540" y="42">qa</text>
+  <rect class="box hi" x="540" y="60" width="150" height="250" rx="14"/>
+  <text class="s" x="615" y="86" text-anchor="middle">your session</text>
+  <rect class="box" x="555" y="100" width="120" height="34" rx="8"/><text class="s mono" x="615" y="122" text-anchor="middle">CLAUDE.md</text>
+  <rect class="box" x="555" y="142" width="120" height="70" rx="8"/><text class="s" x="615" y="170" text-anchor="middle">the whole</text><text class="s" x="615" y="186" text-anchor="middle">build so far</text>
+  <rect class="box purple" x="780" y="80" width="300" height="210" rx="14"/>
+  <text class="pu" x="930" y="108" text-anchor="middle">a fresh context window</text>
+  <text class="s" x="930" y="132" text-anchor="middle">sees the tests, the export, the API</text>
+  <text class="s mono" x="930" y="152" text-anchor="middle">tests/  csv.js</text>
+  <text class="s mono" x="930" y="170" text-anchor="middle">curl localhost:8000/api/stores</text>
+  <text class="r" x="930" y="204" text-anchor="middle">told to break it</text>
+  <text class="s" x="930" y="222" text-anchor="middle">&#8220;skip what the tests prove; try what they do not;</text>
+  <text class="s" x="930" y="238" text-anchor="middle">file each surprise with a repro and the missing test&#8221;</text>
+  <text class="s mono" x="930" y="266" text-anchor="middle">model: sonnet</text>
+  <path class="arr purple" d="M690 150 H778"/>
+  <text class="s" x="734" y="142" text-anchor="middle">task</text>
+  <path class="arr purple" d="M780 230 H692"/>
+  <text class="s" x="734" y="248" text-anchor="middle">findings</text>
+  <text class="s" x="810" y="335" text-anchor="middle">Fresh eyes that did not watch the work. Findings come back,</text>
+  <text class="s" x="810" y="352" text-anchor="middle">not the work. Its context is thrown away when it reports.</text>
+  
+  <text class="t" x="1120" y="24">Agent team</text>
+  <text class="s mono" x="1120" y="42">tester + builder</text>
+  <rect class="box" x="1135" y="100" width="120" height="34" rx="8"/><text class="s mono" x="1195" y="122" text-anchor="middle">you, the lead</text>
+  <text class="s" x="1195" y="86" text-anchor="middle">your session</text>
+  <rect class="box purple" x="1300" y="90" width="300" height="90" rx="8"/>
+  <text class="pu" x="1450" y="112" text-anchor="middle">tester</text>
+  <text class="s" x="1450" y="132" text-anchor="middle">owns tests/</text>
+  <text class="s" x="1450" y="150" text-anchor="middle">writes the failing assertion first</text>
+  <text class="s" x="1450" y="168" text-anchor="middle">never edits app code &#183; haiku</text>
+  <rect class="box purple" x="1300" y="220" width="300" height="90" rx="8"/>
+  <text class="pu" x="1450" y="242" text-anchor="middle">builder</text>
+  <text class="s" x="1450" y="262" text-anchor="middle">owns the app code</text>
+  <text class="s" x="1450" y="280" text-anchor="middle">fixes only what the tester sent</text>
+  <text class="s" x="1450" y="298" text-anchor="middle">never edits tests/ &#183; sonnet</text>
+  <path class="arr purple" d="M1400 180 V218"/>
+  <path class="arr purple" d="M1500 220 V182"/>
+  <text class="s" x="1385" y="204" text-anchor="end">the red assertion</text>
+  <text class="s" x="1515" y="204">the test output</text>
+  <path class="arr purple" d="M1257 117 H1298"/>
+  <text class="s" x="1278" y="76" text-anchor="middle">the ticket</text>
+  <path class="arr purple" d="M1298 265 H1257"/>
+  <text class="s" x="1195" y="290" text-anchor="middle">final output +</text>
+  <text class="s" x="1195" y="306" text-anchor="middle">round trips</text>
+  <text class="s" x="1375" y="335" text-anchor="middle">Two fresh contexts that message each other. The one who</text>
+  <text class="s" x="1375" y="352" text-anchor="middle">writes the check is not the one who writes the code.</text>
+</svg>
+  </div>
+  <figcaption>Same eyes, fresh eyes, different owners. The boxes are context windows; purple is not yours.</figcaption>
+  </figure>
+  <div class="cards three">
+    <div class="card">
+      <span class="k">6a &#183; skill &#183; 1 min</span>
+      <h4>A checklist, run by you</h4>
+      <div class="prompt slash">/pr-ready</div>
+      <p>What an engineer checks before a PR: tests, coverage, lint, only the allowed files changed, a PR description with the evidence pasted. READY or NOT READY. It is Claude grading its own work. It will flag CLAUDE.md in the diff: that is your step 5 edit, expected.</p>
+    </div>
+    <div class="card purple">
+      <span class="k">6b &#183; subagent &#183; 2 min</span>
+      <h4>QA: the cases nobody wrote a test for</h4>
+      <div class="prompt">Use the qa agent on the CSV export: finance will open it in Excel.</div>
+      <p>Fresh context, read-only tools, never saw the conversation. It reads the tests to learn what is already proven, then does what they cannot: opens the file the way finance will, tries a quote in a name, a decimal, an empty fleet, the middle dot in a region, and compares with the live API. What comes back is findings: repro, expected versus actual, and the test that would have caught it. In rehearsal it found the one thing six green tests missed: no UTF-8 byte-order mark, so Excel shows the em dash and middle dot as garbage in every row. The goal in step 3 requires no blocking findings, so Claude fixes it and QA runs again.</p>
+    </div>
+    <div class="card purple">
+      <span class="k">6c &#183; agent team &#183; 3 min</span>
+      <h4>The test and the code have different owners</h4>
+      <p>Finance wants one more column. Two roles any team has: the tester (haiku: one assertion at a time) owns the tests and writes the failing one first; the builder (sonnet) owns the app code and fixes only what the tester sent.</p>
+      <div class="prompt">Spawn two teammates: one using the tester agent type,
+  one using the builder agent type.
+Finance wants an avgRunRate7d column in the CSV export.
+The tester writes the test first and sends each failure
+  directly to the builder; the builder fixes csv.js and replies.
+Repeat until green, then the tester reports the final test
+  output and the number of round trips to me.
+Only csv.js and tests/csv.test.js may change.</div>
+      <p>Watch for the first message between them: a red assertion, not a plan. Then <code>git diff --stat</code>: in rehearsal the builder reached into data.js to satisfy the test, outside the ticket&#8217;s two files. The ownership rule held; the scope rule is yours to check.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 07 -->
+<section class="step" id="s7">
+  <div class="step-meta"><span class="num">STEP 07</span><span class="ep">PR</span><span class="ep">/loop</span><span class="ep">reviews</span><span class="ep">worktree</span><span class="min">8 min</span></div>
+  <h2>Open the PR. Use the wait. Start the next ticket.</h2>
+  <p class="idea">A real pull request. CI runs the suite on a clean machine, which takes minutes. A red check goes to Claude, not to you, and you use the wait.</p>
+  <figure>
+  <div class="figwrap">
+  <svg viewBox="0 0 1110 292" role="img" aria-label="Claude opens a PR; GitHub Actions runs the suite; during the wait a /loop reads the checks every two minutes, a code review subagent reads the diff, and the security plugin scans the branch; all green stops the loop, a failed check goes back to Claude to fix and push, and the two reports go into the PR.">
+  <rect class="box hi" x="20" y="98" width="170" height="80" rx="14"/>
+  <text class="t" x="105" y="132" text-anchor="middle">Claude</text>
+  <text class="s mono" x="105" y="152" text-anchor="middle">open_pr.js &#183; push</text>
+  <rect class="box" x="270" y="98" width="200" height="80" rx="14"/>
+  <text class="t" x="370" y="132" text-anchor="middle">GitHub Actions</text>
+  <text class="s" x="370" y="152" text-anchor="middle">node tests + browser suite</text>
+  <rect class="box purple" x="550" y="20" width="240" height="64" rx="14"/>
+  <text class="pu" x="670" y="46" text-anchor="middle">/loop 2m &#183; gh pr checks</text>
+  <text class="s" x="670" y="66" text-anchor="middle">reads the status every 2 min</text>
+  <rect class="box purple" x="550" y="106" width="240" height="64" rx="14"/>
+  <text class="pu" x="670" y="132" text-anchor="middle">/code-review high</text>
+  <text class="s" x="670" y="152" text-anchor="middle">a subagent reads the diff</text>
+  <rect class="box purple" x="550" y="192" width="240" height="64" rx="14"/>
+  <text class="pu" x="670" y="218" text-anchor="middle">/claude-security scan my branch</text>
+  <text class="s" x="670" y="238" text-anchor="middle">plugin &#183; findings + patch files</text>
+  <rect class="box green" x="880" y="20" width="210" height="64" rx="14"/>
+  <text class="g" x="985" y="46" text-anchor="middle">all green</text>
+  <text class="s" x="985" y="66" text-anchor="middle">report to you, stop looping</text>
+  <rect class="box red" x="880" y="106" width="210" height="64" rx="14"/>
+  <text class="r" x="985" y="132" text-anchor="middle">a check failed</text>
+  <text class="s mono" x="985" y="152" text-anchor="middle">gh run view --log-failed</text>
+  <rect class="box green" x="880" y="192" width="210" height="64" rx="14"/>
+  <text class="g" x="985" y="218" text-anchor="middle">two reports</text>
+  <text class="s" x="985" y="238" text-anchor="middle">into the PR, for you to read</text>
+  <path class="arr" d="M190 138 H268"/>
+  <path class="arr" d="M470 138 H548"/>
+  <path class="arr" d="M470 126 H510 V52 H548"/>
+  <path class="arr" d="M470 150 H510 V224 H548"/>
+  <path class="arr green" d="M790 52 H878"/>
+  <path class="arr red" d="M790 66 H826 V138 H878"/>
+  <path class="arr green" d="M790 138 H846 V210 H878"/>
+  <path class="arr green" d="M790 224 H878"/>
+  <path class="arr red" d="M1090 138 H1102 V284 H105 V180"/>
+  <text class="r" x="600" y="276" text-anchor="middle">fix the cause, run the tests, push &#183; the checks run again</text>
+  </svg>
+  </div>
+  <figcaption>Three things run while CI runs. Only green and the two reports reach you. Merging is still yours.</figcaption>
+  </figure>
+  <div class="two">
+    <div class="do">
+      <h3>1 &#183; Open the PR, then let a loop watch CI</h3>
+      <div class="prompt cmd">node scripts/open_pr.js</div>
+      <div class="prompt slash">/loop 2m check the CI status of my open pull request with gh pr checks.
+If a check failed: read its log with gh run view --log-failed,
+  fix the cause in the code, run node --test tests/*.test.js, push,
+  and tell me what you changed.
+When every check is green, report it and stop.</div>
+      <p class="note">Every two minutes it checks. Red: Claude fixes and pushes. Green: stop it with this (Esc does not):</p>
+      <div class="prompt">cancel the CI loop</div>
+      <h3 style="margin-top:16px">2 &#183; Two reviews while CI runs</h3>
+      <div class="prompt slash">/code-review high</div>
+      <div class="prompt slash">/plugin install claude-security@claude-plugins-official</div>
+      <div class="prompt slash">/claude-security scan my branch</div>
+      <p class="note">Code review is built in. The security scan is a plugin from the official marketplace; always &#8220;my branch&#8221;.</p>
+      <h3 style="margin-top:16px">3 &#183; A quick change request comes in</h3>
+      <p class="note">The loop is pushing here. Terminal C, and Claude Code makes the separate checkout:</p>
+      <div class="prompt term">claude --worktree title-tweak</div>
+      <div class="prompt">Change the dashboard title in index.html to "Beacon · Site Health · Q3". Do not commit.</div>
+      <p class="note">Own folder under <code>.claude/worktrees/</code>, own branch, same hooks. Or, in any session, say &#8220;work on this in a worktree&#8221;.</p>
+      <h3 style="margin-top:16px">4 &#183; See all of it</h3>
+      <div class="prompt term">claude agents</div>
+    </div>
+    <div class="see">
+      <h3>You should see</h3>
+      <ul>
+        <li>A real PR, checks running, your session free. Red on CI goes to Claude: it reads the log, fixes, pushes.</li>
+        <li>Two reports land while you wait: code review findings, and a security folder with patches it never applies for you. On the PR itself, <code>claude-review</code> posts a verdict too; in rehearsal it asked for the CLAUDE.md edit to be reverted, which is the right call.</li>
+        <li><code>claude agents</code>: every session on one screen. Nobody merges here; that is you, on GitHub.</li>
+      </ul>
+      <div class="check"><b>checkpoint</b><span>You installed a plugin with one command. Step 9 is you shipping your own the same way.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 08 -->
+<section class="step" id="s8">
+  <div class="step-meta"><span class="num">STEP 08</span><span class="ep">/verify</span><span class="min">3 min</span></div>
+  <h2>Tests pass. Now click the button the way finance will.</h2>
+  <p class="idea">The test proved the text is right. Nobody has clicked the button. <code>/verify</code> drives the real app in a browser, downloads the file, and compares it with the API.</p>
+  <div class="two verify">
+    <div class="do">
+      <h3>Do this</h3>
+      <div class="prompt slash">/verify the Export CSV button</div>
+      <p class="note">You name the feature. Claude works out how to drive it and saves the recipe in <code>.claude/skills/verify/SKILL.md</code>, so next time it is one command.</p>
+      <p class="note">Not the same as <code>/goal</code>: the goal judges the transcript after every turn; verify drives the app once and brings evidence. Add &#8220;and /verify reports VERIFIED&#8221; to a goal to make it unskippable.</p>
+    </div>
+    <div class="see">
+      <h3>You should see</h3>
+      <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="dim">verify &#183; Export CSV</span>
+button in header  <span class="grn">yes</span>  screenshot kept
+download          <span class="grn">yes</span>  beacon-sites.csv, 485 bytes
+rows x columns    <span class="grn">6 x 8</span>  every row has 8 cells
+Austin region     <span class="grn">one cell</span>  "Austin, TX &#183; South Central"
+Austin fillRate   <span class="grn">84.7</span>  card 84.7%  api 84.7
+<span class="grn">VERIFIED</span> &#183; evidence attached below</pre></div>
+      <p class="note">What this catches that no node test can: the button is not wired, not where a person looks, or the file has the wrong name.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 09 -->
+<section class="step" id="s9">
+  <div class="step-meta"><span class="num">STEP 09</span><span class="ep">plugin</span><span class="min">3 min</span></div>
+  <h2>Everything you turned on is a file. Ship the files.</h2>
+  <p class="idea">Two hooks, one skill, three agents, one manifest. The next repo and the next person get the same checks with one install.</p>
+  <div class="two">
+    <div class="do">
+      <h3>Do this</h3>
+      <div class="prompt cmd">find beacon-loop-plugin -type f</div>
+      <div class="prompt cmd">claude plugin validate beacon-loop-plugin</div>
+      <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre>beacon-loop-plugin/.claude-plugin/plugin.json
+beacon-loop-plugin/.claude-plugin/marketplace.json
+beacon-loop-plugin/hooks/hooks.json
+beacon-loop-plugin/hooks/test-changed.js
+beacon-loop-plugin/hooks/stop-check.js
+beacon-loop-plugin/skills/pr-ready/SKILL.md
+beacon-loop-plugin/agents/qa.md
+beacon-loop-plugin/agents/tester.md
+beacon-loop-plugin/agents/builder.md</pre></div>
+      <p class="note">Terminal C again (exit the worktree session first):</p>
+      <div class="prompt term">mkdir ../second-repo &amp;&amp; cd ../second-repo &amp;&amp; claude</div>
+      <div class="prompt slash">/plugin marketplace add ../sdlc-demo/beacon-loop-plugin</div>
+      <div class="prompt slash">/plugin install beacon-loop@beacon-loop</div>
+    </div>
+    <div class="see">
+      <h3>You should see</h3>
+      <ul>
+        <li>In the empty folder, <code>/hooks</code> lists both hooks and <code>/agents</code> lists qa, tester and builder.</li>
+        <li>A plugin cannot carry a CLAUDE.md. Deliberate: nothing gets to add to every session&#8217;s context unconditionally.</li>
+      </ul>
+      <p class="why">If a way of working is written down, some people follow it. If it is installed, everyone does.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 10 -->
+<section class="step" id="s10">
+  <div class="step-meta"><span class="num">STEP 10</span><span class="ep">wrap up</span><span class="min">2 min</span></div>
+  <h2>What you take home.</h2>
+  <div class="take">
+    <div><div class="n">01</div><h4>Put the check where Claude cannot skip it.</h4><p>Write done as something a program can check. Put it in a goal or a hook. Red goes to Claude, not to you.</p></div>
+    <div><div class="n">02</div><h4>Make every check fail once, on purpose.</h4><p>Until you have watched it go red, green is just silence.</p></div>
+    <div><div class="n">03</div><h4>Ship the loop, not the instructions.</h4><p>Hooks, skills and agents are files. Put them in a plugin. One install, same checks everywhere.</p></div>
+  </div>
+  <div class="two">
+    <div class="do">
+      <h3>Last two commands</h3>
+      <div class="prompt slash">/goal</div>
+      <div class="prompt slash">/usage</div>
+    </div>
+    <div class="see">
+      <p>You typed the ticket and what done means. You will approve the PR. Everything in between ran on its own. Start your own repo with one hook and one goal.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<footer class="foot">
+  <p>Beacon and Silvern Capital are fictional. The workshop follows the shape of the &#8220;Build the loop, not the prompt&#8221; talk; the wording, the feature and the steps are our own.</p>
+</footer>
+
+</div>
