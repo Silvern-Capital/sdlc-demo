@@ -1,7 +1,7 @@
 // Beacon Site Health — zero-dependency dev server + stores API
 // Usage: node serve.js  →  http://localhost:8000
 // Serves the static dashboard and exposes:
-//   GET /api/stores      → full window.SITES array from data.js
+//   GET /api/stores      → full window.STORES array from data.js
 //   GET /api/stores/:id  → single store, 404 if unknown
 var http = require("http");
 var fs = require("fs");
@@ -9,7 +9,7 @@ var path = require("path");
 
 global.window = {};
 require("./data.js");
-var SITES = global.window.SITES;
+var STORES = global.window.STORES;
 
 var PORT = process.env.PORT || 8000;
 var ROOT = __dirname;
@@ -19,6 +19,7 @@ var MIME = {
   ".js": "application/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".jsonl": "application/x-ndjson; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon"
@@ -39,14 +40,14 @@ var server = http.createServer(function (req, res) {
   }
 
   if (url === "/api/stores") {
-    sendJson(res, 200, SITES);
+    sendJson(res, 200, STORES);
     return;
   }
 
   var m = url.match(/^\/api\/stores\/([^\/]+)$/);
   if (m) {
     var id = decodeURIComponent(m[1]);
-    var store = SITES.filter(function (s) { return s.id === id; })[0];
+    var store = STORES.filter(function (s) { return s.id === id; })[0];
     if (store) {
       sendJson(res, 200, store);
     } else {
@@ -74,5 +75,5 @@ var server = http.createServer(function (req, res) {
 });
 
 server.listen(PORT, function () {
-  console.log("Beacon serving http://localhost:" + PORT + " (API: /api/stores)");
+  console.log("Beacon serving http://localhost:" + PORT + " (API: /api/stores)"); // lint-ok: server startup banner
 });

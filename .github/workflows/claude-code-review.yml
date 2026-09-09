@@ -1,0 +1,67 @@
+# Claude code review: Claude reads every pull request and leaves comments.
+#
+# Claude is a reviewer, not an approver. Branch protection decides who can
+# approve, and that stays a person. Claude's comments are advice for the
+# human reviewer. Uses claude-code-action@v1 and the ANTHROPIC_API_KEY
+# repo secret.
+
+name: claude-code-review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event.pull_request.draft != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Claude code review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review pull request #${{ github.event.pull_request.number }} in
+            ${{ github.repository }}.
+
+            Read REVIEW.md first. It defines what counts as Important versus
+            Nit for this repository and caps the nits at 4. Follow it.
+
+            Then read CLAUDE.md for the conventions (ES5 style, the fixed
+            status vocabulary "ok" | "warn" | "down", CSS custom properties
+            for colors, window.STORES as the single source of truth).
+
+            Check the diff for:
+            - Correctness bugs and missing edge cases. For a CSV export:
+              quoting of fields that contain commas or quotes, the header
+              row, one row per record.
+            - Whether a new feature has a test in tests/ (node:test files run
+              with `node --test tests/*.test.js`; Playwright specs run on CI) and
+              whether every existing test still has a reason to pass.
+            - Whether any existing test was edited to make it pass. Call
+              that out as Important.
+            - Changes to .github/, .claude/, hooks/, scripts/, or package
+              files need a person to sign off; call them out.
+            - Anything a careful human reviewer would flag before approval.
+
+            Leave short, specific comments on the lines that need attention.
+            Then post one summary comment with `gh pr comment`. If there are
+            no Important findings, start it with "Verdict: looks good".
+            Otherwise start it with "Verdict: changes requested". Do not
+            approve or request changes through the GitHub review UI; a
+            person does that.
+          claude_args: '--allowedTools "Read,Glob,Grep,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),mcp__github_inline_comment__*"'

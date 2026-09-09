@@ -3,6 +3,8 @@ var defineConfig = require("@playwright/test").defineConfig;
 
 module.exports = defineConfig({
   testDir: "./tests",
+  // Only the Playwright specs; *.test.js files are node:test and run with node --test.
+  testMatch: /.*\.spec\.js$/,
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: "http://localhost:8000",

@@ -3,3 +3,7 @@
 node_modules/
 test-results/
 playwright-report/
+.pr-body.md
+
+# local Claude Code settings stay local
+.claude/settings.local.json
