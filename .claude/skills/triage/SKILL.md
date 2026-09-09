@@ -1,6 +1,6 @@
 ---
 name: triage
-description: "Triage a failing check the same way every time: reproduce first, quote the failing assertion, name the file and line, report cause, blast radius and the one-line fix. Does not fix anything."
+description: Reproduce a failing check, quote the assertion, name the file and line, report cause and the one-line fix. Never fixes. Use when a check goes red.
 ---
 
 Triage $ARGUMENTS:

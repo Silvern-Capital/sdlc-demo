@@ -1,6 +1,6 @@
 ---
 name: csv-reviewer
-description: Independent reviewer for the CSV export. Sees only the exported text and the live API, never the conversation that built it, and is told to refute. Use after the export is built; the goal condition requires its verdict.
+description: Fresh-context reviewer for the CSV export, told to refute: compares the export with the live API and says DISAGREES unless every check is proven. Use after the export is built.
 tools: Bash, Read
 model: haiku
 ---

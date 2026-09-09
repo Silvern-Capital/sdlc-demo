@@ -1,6 +1,6 @@
 ---
 name: export-builder
-description: Teammate that owns csv.js. Waits for export-checker's failing assertion, makes it pass by changing csv.js only, and replies with the test output. Never edits tests.
+description: Teammate that owns csv.js: waits for export-checker's failing assertion, fixes csv.js only, replies with the test output. Never edits tests.
 tools: Bash, Read, Edit, Write
 ---
 

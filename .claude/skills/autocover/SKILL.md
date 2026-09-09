@@ -1,6 +1,6 @@
 ---
 name: autocover
-description: Raise test coverage on the app files by writing the missing node tests. Reads the coverage table, finds uncovered lines and functions in the app code, writes new test files that exercise them, re-runs, and reports before and after. Never edits app code or existing tests. Use when /pr-ready reports coverage below the bar.
+description: Write the missing node tests for uncovered app code, as new files only, and report coverage before and after. Use when /pr-ready says coverage is short.
 ---
 
 # Autocover

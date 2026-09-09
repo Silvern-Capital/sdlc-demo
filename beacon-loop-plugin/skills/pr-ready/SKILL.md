@@ -1,6 +1,6 @@
 ---
 name: pr-ready
-description: Everything an engineer checks before opening a pull request, except code review: tests, coverage, lint, scope of the diff, the feature tried, and the PR description with the evidence pasted. Ends READY or NOT READY. Use before node scripts/open_pr.js.
+description: Pre-PR checklist: tests, coverage, lint, diff scope, feature tried, PR text with evidence. Ends READY or NOT READY. Use before opening a pull request.
 ---
 
 # PR ready

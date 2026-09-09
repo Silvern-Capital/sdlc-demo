@@ -1,6 +1,6 @@
 ---
 name: export-checker
-description: Teammate that owns the CSV test. Writes the test for the next export column first, sends every failure straight to export-builder, re-runs until green, and reports the final output to the lead. Never edits csv.js.
+description: Teammate that owns the CSV test: writes it first for the next column, sends each failure straight to export-builder, reports the final output. Never edits csv.js.
 tools: Bash, Read, Edit, Write
 ---
 
