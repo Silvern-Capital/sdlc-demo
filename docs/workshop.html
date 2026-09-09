@@ -418,7 +418,7 @@ Do not commit, branch, or push.</div>
     <h3>Good to know: the same review as a hook</h3>
     <p>Today the goal requires the QA review, so the evaluator sends Claude back until it has run. In the engineering team&#8217;s setup the review is a Stop hook instead: when Claude says it is done, the hook starts a separate run of the QA agent on the diff, once per diff, and a blocking finding goes back to Claude before it can stop. Same rule, enforced by a hook rather than by the goal. One line does it:</p>
     <div class="prompt cmd">claude -p --agent qa "Review the current diff. Report blocking findings."</div>
-    <p class="note">It is a separate billed run each time, and it takes about a minute, which is why it belongs at Stop and not on every edit. Not part of today&#8217;s flow.</p>
+    <p class="note">It is in this repo as <code>.claude/hooks/qa-review.js</code>, wired at Stop and off by default. Start a session with <code>BEACON_QA_STOP=1 claude</code> to turn it on. It is a separate billed run each time and takes about a minute, which is why it belongs at Stop and not on every edit, and why it is not part of today&#8217;s flow.</p>
   </div>
 </section>
 
@@ -510,6 +510,7 @@ node --test tests/*.test.js is red after your edit to csv.js.
   <div class="files">
     <div class="file"><div class="fh"><code>.claude/settings.json</code><span>when</span></div><pre>after any edit          →  run test-changed.js
 when Claude says done   →  run stop-check.js
+when Claude says done   →  qa-review.js (the QA agent as a hook; off unless BEACON_QA_STOP=1)
 before any Bash command →  guard-push.js (refuses git push --force; not today)</pre></div>
     <div class="file"><div class="fh"><code>.claude/hooks/test-changed.js</code><span>what</span></div><pre>not an app file?   exit 0  (silent, free)
 run the tests
@@ -740,7 +741,7 @@ Austin fillRate   <span class="grn">84.7</span>  card 84.7%  api 84.7
 <section class="step" id="s9">
   <div class="step-meta"><span class="num">STEP 09</span><span class="ep">plugin</span><span class="min">3 min</span></div>
   <h2>Everything you turned on is a file. Ship the files.</h2>
-  <p class="idea">Three hooks, one skill, three agents, one manifest. The next repo and the next person get the same checks with one install.</p>
+  <p class="idea">Four hooks, one skill, three agents, one manifest. The next repo and the next person get the same checks with one install.</p>
   <div class="two">
     <div class="do">
       <h3>Do this</h3>
@@ -750,6 +751,7 @@ Austin fillRate   <span class="grn">84.7</span>  card 84.7%  api 84.7
 beacon-loop-plugin/.claude-plugin/marketplace.json
 beacon-loop-plugin/hooks/hooks.json
 beacon-loop-plugin/hooks/guard-push.js
+beacon-loop-plugin/hooks/qa-review.js
 beacon-loop-plugin/hooks/test-changed.js
 beacon-loop-plugin/hooks/stop-check.js
 beacon-loop-plugin/skills/pr-ready/SKILL.md
@@ -764,7 +766,7 @@ beacon-loop-plugin/agents/builder.md</pre></div>
     <div class="see">
       <h3>You should see</h3>
       <ul>
-        <li>In the empty folder, <code>/hooks</code> lists the three hooks and <code>/agents</code> lists qa, tester and builder.</li>
+        <li>In the empty folder, <code>/hooks</code> lists the four hooks and <code>/agents</code> lists qa, tester and builder.</li>
         <li>A plugin cannot carry a CLAUDE.md. Deliberate: nothing gets to add to every session&#8217;s context unconditionally.</li>
       </ul>
       <p class="why">If a way of working is written down, some people follow it. If it is installed, everyone does.</p>
