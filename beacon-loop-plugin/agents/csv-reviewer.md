@@ -17,7 +17,7 @@ not asked whether it looks good.
    ```
 2. Get the source of truth from the running server, not from the code:
    ```bash
-   curl -sf localhost:8000/api/stores > /tmp/stores.json || (PORT=8123 node serve.js & sleep 1; curl -sf localhost:8123/api/stores > /tmp/stores.json)
+   curl -sf localhost:8000/api/stores > /tmp/stores.json || (PORT=8123 node serve.js & P=$!; sleep 1; curl -sf localhost:8123/api/stores > /tmp/stores.json; kill $P)
    ```
 3. Parse the CSV properly: quoted fields may contain commas. Do not split
    on commas alone.

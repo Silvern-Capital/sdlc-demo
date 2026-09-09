@@ -12,7 +12,7 @@ no build step. `npm run serve` serves it on :8000 with the API at /api/stores.
 
 ## What done means, for any change
 - A test in tests/ asserts the new behavior. Write it first; watch it fail.
-- `node --test tests/*.test.js` reports 0 failing.
+- Run `node --test tests/*.test.js` after every change; it reports 0 failing.
 - `node scripts/lint.js` reports 0 warnings.
 - Never edit an existing test to make it pass.
 - Paste the test and lint output in your final message, do not summarize it.

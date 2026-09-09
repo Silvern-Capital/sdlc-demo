@@ -10,7 +10,7 @@ var fs = require("fs");
 var path = require("path");
 var cp = require("child_process");
 
-var ROOT = process.env.CLAUDE_PROJECT_DIR || path.resolve(__dirname, "..", "..");
+var ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
 
 function testFiles() {
   var dir = path.join(ROOT, "tests");
