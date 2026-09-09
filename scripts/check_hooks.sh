@@ -29,6 +29,9 @@ run() {
 
 run "guard-push: force push is refused" guard-push.js 2 '{"tool_name":"Bash","tool_input":{"command":"git push --force origin main"}}'
 run "guard-push: normal push is allowed" guard-push.js 0 '{"tool_name":"Bash","tool_input":{"command":"git push -u origin feature"}}'
+run "guard-push: +refspec is refused" guard-push.js 2 '{"tool_name":"Bash","tool_input":{"command":"git push origin +main"}}'
+run "guard-push: --delete is refused" guard-push.js 2 '{"tool_name":"Bash","tool_input":{"command":"git push origin --delete main"}}'
+run "guard-push: indirect shell push is refused" guard-push.js 2 '{"tool_name":"Bash","tool_input":{"command":"sh -c \"git push --force\""}}'
 
 run "post: README.md is not an app file, silent"  test-changed.js 0 '{"tool_name":"Edit","tool_input":{"file_path":"README.md"}}'
 run "post: data.js edit, tests green, silent"     test-changed.js 0 '{"tool_name":"Edit","tool_input":{"file_path":"data.js"}}'

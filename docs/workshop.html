@@ -338,12 +338,12 @@ branches or pull requests for the same feature.</pre></div>
     </div>
     <div class="see">
       <h3>Why the file is short</h3>
-      <p>Every line here is paid on every task, whether it applies or not. So it holds only what is always true. Checks live elsewhere, where they cost nothing and cannot be skipped:</p>
+      <p>It sits at the front of the prompt, so it is cached and cheap. What caching does not remove is the space. Every line takes room in the context window on every task, whether it applies or not, and that room is what Claude has left for your code and the test output. So the file holds only what is always true. Checks live elsewhere, where they take no room and cannot be skipped.</p>
     </div>
   </div>
   <div class="tbl"><div class="scroll"><table>
-    <tr><th>Where you put it</th><th>What Claude pays</th></tr>
-    <tr><td class="k">CLAUDE.md</td><td class="high">the whole file, every session</td></tr>
+    <tr><th>Where you put it</th><th>What it takes from the context window</th></tr>
+    <tr><td class="k">CLAUDE.md</td><td class="high">the whole file, every session, cached but still taking the space</td></tr>
     <tr><td class="k">an MCP server</td><td class="high">every tool&#8217;s name and schema, every session, used or not. Why this workshop leaves MCP out</td></tr>
     <tr><td class="k">a skill</td><td>one line every session, the body only when used</td></tr>
     <tr><td class="k">a subagent</td><td>one line; its work happens in its own context</td></tr>
