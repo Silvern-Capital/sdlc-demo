@@ -1,6 +1,8 @@
 {
   "name": "beacon-loop",
   "version": "1.0.0",
-  "description": "The Beacon loop: two hooks (node tests on every edit, tests plus lint at Stop), the eval-outcomes skill, an independent csv-reviewer subagent, and two planning teammates.",
-  "author": { "name": "Silvern-Capital" }
+  "description": "The Beacon loop: two hooks (node tests on every edit, tests plus lint at Stop), the eval-outcomes skill, and the csv-reviewer subagent that is told to refute.",
+  "author": {
+    "name": "Silvern-Capital"
+  }
 }

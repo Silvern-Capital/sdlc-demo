@@ -35,8 +35,7 @@ Google Chrome you already have.
 - `hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
 - `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
 - `.claude/skills/eval-outcomes` — grades a finished feature on outcomes with quoted evidence.
-- `.claude/agents/csv-reviewer.md` — a subagent with fresh context, told to find a row where the export disagrees with the data.
-- `.claude/agents/export-builder.md`, `export-reviewer.md` — two teammates that settle the next increment by messaging each other (agent teams; experimental, enabled in `.claude/settings.json`).
+- `.claude/agents/csv-reviewer.md` — a subagent with fresh context that compares the export with the running API and is told to refute: if it cannot prove every check agrees, the verdict is DISAGREES.
 - `beacon-loop-plugin/` — all of the above packaged as a plugin. `/plugin marketplace add ./beacon-loop-plugin` then `/plugin install beacon-loop@beacon-loop`.
 - `.github/workflows/` — `ci.yml` (node tests, lint, browser suite), `claude-code-review.yml` (review comment, advice only), `ci-triage.yml` (explains a red run on a PR).
 

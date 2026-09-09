@@ -1,8 +1,14 @@
 {
   "name": "beacon-loop",
   "description": "Marketplace for the Beacon loop plugin",
-  "owner": { "name": "Silvern-Capital" },
+  "owner": {
+    "name": "Silvern-Capital"
+  },
   "plugins": [
-    { "name": "beacon-loop", "source": "./", "description": "The two hooks, the eval-outcomes skill and the three agents from the Beacon loop workshop." }
+    {
+      "name": "beacon-loop",
+      "source": "./",
+      "description": "The two hooks, the eval-outcomes skill and the csv-reviewer agent from the Beacon loop workshop."
+    }
   ]
 }
