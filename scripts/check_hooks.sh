@@ -6,8 +6,8 @@
 set -u
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 TMP="$(mktemp -d)"
-mkdir -p "$TMP/hooks" "$TMP/tests" "$TMP/scripts"
-cp "$HERE"/hooks/*.js "$TMP/hooks/"
+mkdir -p "$TMP/.claude/hooks" "$TMP/tests" "$TMP/scripts"
+cp "$HERE"/.claude/hooks/*.js "$TMP/.claude/hooks/"
 cp "$HERE"/tests/*.test.js "$TMP/tests/"
 cp "$HERE"/scripts/lint.js "$TMP/scripts/"
 cp "$HERE"/data.js "$HERE"/index.html "$HERE"/serve.js "$TMP/"
@@ -18,7 +18,7 @@ FAILED=0
 
 run() {
   local name="$1" hook="$2" want="$3" json="$4"
-  printf '%s' "$json" | node "$TMP/hooks/$hook" >/dev/null 2>"$TMP/err.txt"
+  printf '%s' "$json" | node "$TMP/.claude/hooks/$hook" >/dev/null 2>"$TMP/err.txt"
   local got=$?
   if [ "$got" = "$want" ]; then
     echo "PASS  exit $got  $name"

@@ -31,8 +31,8 @@ Google Chrome you already have.
 ## What the workshop turns on
 
 - `CLAUDE.md` — conventions and what done means. It asks; it cannot enforce.
-- `hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
-- `hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
+- `.claude/hooks/test-changed.js` — PostToolUse: runs the node tests after every app edit.
+- `.claude/hooks/stop-check.js` — Stop: runs the node tests plus lint before Claude may finish.
 - `.claude/statusline.js` — prints model, estimated cost, context used and lines changed at the bottom of the terminal. Zero tokens.
 - `.claude/skills/prove-done` — turns "done" into evidence: restates the finish line as checks, runs each one, makes each green go red once in a scratch copy, and writes the evidence block for the PR.
 - `.claude/agents/csv-reviewer.md` — a subagent with fresh context that compares the export with the running API and is told to refute: if it cannot prove every check agrees, the verdict is DISAGREES.

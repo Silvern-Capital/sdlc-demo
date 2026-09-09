@@ -13,7 +13,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/hooks/test-changed.js\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/test-changed.js\""
           }
         ]
       }
@@ -23,7 +23,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/hooks/stop-check.js\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/stop-check.js\""
           }
         ]
       }

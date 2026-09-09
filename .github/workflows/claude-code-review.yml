@@ -54,8 +54,9 @@ jobs:
               whether every existing test still has a reason to pass.
             - Whether any existing test was edited to make it pass. Call
               that out as Important.
-            - Changes to .github/, .claude/, hooks/, scripts/, or package
-              files need a person to sign off; call them out.
+            - Changes to .github/, .claude/ (hooks, settings, agents, skills),
+              scripts/, or package files need a person to sign off; call
+              them out.
             - Anything a careful human reviewer would flag before approval.
 
             Leave short, specific comments on the lines that need attention.
