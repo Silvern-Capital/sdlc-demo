@@ -80,3 +80,7 @@ scan is a plugin from the official marketplace:
 
 It writes a `CLAUDE-SECURITY-<timestamp>/` folder with a findings report and
 patch files; nothing is applied for you.
+
+## Workshop
+
+`docs/workshop.html` is the hands-on workshop page participants follow; open it in a browser.
