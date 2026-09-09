@@ -37,8 +37,8 @@ Google Chrome you already have.
 - `.claude/skills/pr-ready` — everything before a pull request except code review: tests, coverage (Node's built-in), lint, scope of the diff, feature tried, PR description with the evidence pasted. Ends READY or NOT READY.
 - `.claude/skills/autocover` — reads the coverage table, writes the missing node tests for uncovered app code as new files, re-runs, reports before and after. Never edits app code or existing tests.
 - `.claude/skills/triage` — reproduce a failing check, quote the assertion, name the file and line, report cause, blast radius and the one-line fix. Does not fix.
-- `.claude/agents/qa.md` — exploratory QA in a fresh context: tries the cases nobody wrote a test for and files findings with a repro, expected versus actual, and the test that would have caught each.
-- `.claude/agents/tester.md`, `builder.md` — an agent team where the test and the code have different owners: the tester writes the failing test first and sends it to the builder; the builder changes only app code. Agent teams are experimental; `.claude/settings.json` enables them. Set `"teammateMode": "tmux"` there for split panes.
+- `.claude/agents/qa.md` (sonnet) — exploratory QA in a fresh context: tries the cases nobody wrote a test for and files findings with a repro, expected versus actual, and the test that would have caught each.
+- `.claude/agents/tester.md` (haiku), `builder.md` (sonnet) — an agent team where the test and the code have different owners: the tester writes the failing test first and sends it to the builder; the builder changes only app code. Agent teams are experimental; `.claude/settings.json` enables them. Set `"teammateMode": "tmux"` there for split panes.
 - `beacon-loop-plugin/` — all of the above packaged as a plugin. `/plugin marketplace add ./beacon-loop-plugin` then `/plugin install beacon-loop@beacon-loop`.
 - `.github/workflows/` — `ci.yml` (node tests, lint, browser suite), `claude-review.yml` (AI review comment, advice only), `claude-triage.yml` (AI: explains a red run on a PR). The `claude-` prefix marks the AI checks; `ci` is plain scripts.
 
