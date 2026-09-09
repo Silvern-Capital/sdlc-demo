@@ -1,7 +1,7 @@
 {
   "name": "beacon-loop",
   "version": "1.0.0",
-  "description": "The Beacon loop: two hooks (node tests on every edit, tests plus lint at Stop), the pr-ready, autocover and triage skills, the csv-reviewer subagent that is told to refute, and a checker/builder agent team where the test and the code have different owners.",
+  "description": "The Beacon loop: two hooks (node tests on every edit, tests plus lint at Stop), the pr-ready skill, the qa agent subagent that is told to refute, and a checker/builder agent team where the test and the code have different owners.",
   "author": {
     "name": "Silvern-Capital"
   }

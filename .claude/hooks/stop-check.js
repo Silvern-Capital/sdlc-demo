@@ -11,20 +11,33 @@ var fs = require("fs");
 var path = require("path");
 var cp = require("child_process");
 
-var ROOT = process.env.CLAUDE_PROJECT_DIR || path.resolve(__dirname, "..", "..");
+// The event JSON carries cwd. In a worktree (claude --worktree) that is the
+// worktree root while CLAUDE_PROJECT_DIR stays at the main checkout. Use cwd
+// only when git says it belongs to this same repository (same common dir),
+// and take git's toplevel for it; otherwise stay on CLAUDE_PROJECT_DIR.
+var INPUT = (function () {
+  try { return JSON.parse(fs.readFileSync(0, "utf8") || "{}"); } catch (e) { return {}; }
+})();
+var PROJECT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+function gitOut(dir, args) {
+  var r = cp.spawnSync("git", ["-C", dir].concat(args), { encoding: "utf8" });
+  return r.status === 0 ? r.stdout.trim() : null;
+}
+function worktreeRoot(cwd) {
+  if (!cwd || typeof cwd !== "string" || !fs.existsSync(cwd)) return null;
+  if (cwd.split(path.sep).indexOf("node_modules") !== -1) return null;
+  var projectCommon = gitOut(PROJECT, ["rev-parse", "--path-format=absolute", "--git-common-dir"]);
+  var cwdCommon = gitOut(cwd, ["rev-parse", "--path-format=absolute", "--git-common-dir"]);
+  if (!projectCommon || !cwdCommon || projectCommon !== cwdCommon) return null;
+  var top = gitOut(cwd, ["rev-parse", "--show-toplevel"]);
+  return top && fs.existsSync(path.join(top, "package.json")) ? top : null;
+}
+var ROOT = worktreeRoot(INPUT.cwd) || PROJECT;
 
 function testFiles() {
   var dir = path.join(ROOT, "tests");
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter(function (f) { return /\.test\.js$/.test(f); }).map(function (f) { return "tests/" + f; });
-}
-
-function readInput() {
-  try {
-    return JSON.parse(fs.readFileSync(0, "utf8") || "{}");
-  } catch (e) {
-    return {};
-  }
 }
 
 function isAppFile(rel) {
@@ -33,7 +46,7 @@ function isAppFile(rel) {
   return /^[^\/]+\.(js|html)$/.test(rel);
 }
 
-var input = readInput();
+var input = INPUT;
 if (input.stop_hook_active) process.exit(0);
 
 var status = cp.spawnSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" });
