@@ -7,6 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/silvern-logo.svg">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data.js"></script>
+<script src="csv.js"></script>
 <style>
   :root{
     --brand:#1B2A4A;
@@ -50,6 +51,20 @@
   .hstatus .live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);}
   .hstatus .live .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(31,138,68,.16);}
   .hstatus .synced{font-size:11px;color:var(--gray);font-variant-numeric:tabular-nums;}
+  #export-csv{
+    flex:none;
+    padding:8px 14px;
+    font-size:12px;
+    font-weight:600;
+    font-family:inherit;
+    color:#fff;
+    background:var(--brand);
+    border:1px solid var(--brand);
+    border-radius:8px;
+    cursor:pointer;
+  }
+  #export-csv:hover{background:#243a63;}
+  #export-csv:focus{outline:none;box-shadow:0 0 0 3px rgba(27,42,74,.24);}
   .rule{height:3px;background:var(--brand);}
 
   /* Layout */
@@ -190,6 +205,7 @@
       <span class="live"><span class="dot"></span>Live</span>
       <span class="synced" id="synced">Synced just now</span>
     </div>
+    <button id="export-csv" type="button">Export CSV</button>
   </header>
   <div class="rule"></div>
 
@@ -304,9 +320,26 @@
       document.getElementById("store-count").textContent = "· " + window.STORES.length + " locations";
     }
 
+    function initExport(){
+      var button = document.getElementById("export-csv");
+      button.addEventListener("click", function(){
+        var csv = window.toCsv(window.STORES);
+        var blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = "beacon-sites.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
+    }
+
     renderKpis();
     renderStores();
     initSearch();
+    initExport();
     renderMeta();
   </script>
 </body>
