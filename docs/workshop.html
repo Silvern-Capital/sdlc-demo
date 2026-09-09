@@ -584,6 +584,10 @@ red?  print it     exit 2  (Claude sees it)</pre></div>
       <span class="k">5c &#183; agent team &#183; 3 min</span>
       <h4>The test and the code have different owners</h4>
       <p>Finance wants one more column. Two roles any team has: the tester (haiku: one assertion at a time) owns the tests and writes the failing one first; the builder (sonnet) owns the app code and fixes only what the tester sent.</p>
+      <p class="note">Want the two teammates in split panes? Set <code>"teammateMode": "tmux"</code> in <code>.claude/settings.json</code>, then start Claude inside a fresh tmux session. If an old one is around, clear it first (this closes every tmux session on the machine):</p>
+      <div class="prompt cmd">tmux kill-server</div>
+      <div class="prompt cmd">tmux new -s beacon</div>
+      <div class="prompt cmd">claude</div>
       <div class="prompt">Spawn two teammates: one using the tester agent type,
   one using the builder agent type.
 Finance wants an avgRunRate7d column in the CSV export.
