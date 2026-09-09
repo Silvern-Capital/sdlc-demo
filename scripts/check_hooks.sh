@@ -27,6 +27,8 @@ run() {
   fi
 }
 
+run "qa-review: off by default, silent" qa-review.js 0 '{"stop_hook_active":false}'
+BEACON_QA_STOP=dry run "qa-review: dry run with no app changes, silent" qa-review.js 0 '{"stop_hook_active":false}'
 run "guard-push: force push is refused" guard-push.js 2 '{"tool_name":"Bash","tool_input":{"command":"git push --force origin main"}}'
 run "guard-push: normal push is allowed" guard-push.js 0 '{"tool_name":"Bash","tool_input":{"command":"git push -u origin feature"}}'
 run "guard-push: +refspec is refused" guard-push.js 2 '{"tool_name":"Bash","tool_input":{"command":"git push origin +main"}}'
