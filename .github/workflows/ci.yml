@@ -42,25 +42,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
-
-  qa-test-gap:
-    # The QA sweep's test-gap leg, as a PR comment: what has no test yet.
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Claude QA test-gap analysis
-        uses: anthropics/claude-code-action@v1
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: |
-            Run the qa-test-gap skill, then post the resulting table as a
-            comment on PR #${{ github.event.pull_request.number }} with
-            `gh pr comment`.
-          claude_args: '--allowedTools "Bash(gh pr comment:*)"'

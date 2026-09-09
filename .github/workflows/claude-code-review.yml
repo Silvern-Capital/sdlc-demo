@@ -2,8 +2,8 @@
 #
 # Claude is a reviewer, not an approver. Branch protection decides who can
 # approve, and that stays a person. Claude's comments are advice for the
-# human reviewer. Uses the same claude-code-action@v1 and ANTHROPIC_API_KEY
-# secret as the qa-test-gap job in ci.yml.
+# human reviewer. Uses claude-code-action@v1 and the ANTHROPIC_API_KEY
+# repo secret.
 
 name: claude-code-review
 

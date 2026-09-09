@@ -1,6 +1,6 @@
 {
   "name": "beacon-loop",
   "version": "1.0.0",
-  "description": "The Beacon loop: two hooks (node tests on every edit, tests plus lint at Stop), the eval-outcomes skill, an independent csv-reviewer subagent, two planning teammates, and the QA sweep (qa-orchestrator, qa-engineer, qa-api, qa-e2e, qa-test-gap).",
+  "description": "The Beacon loop: two hooks (node tests on every edit, tests plus lint at Stop), the eval-outcomes skill, an independent csv-reviewer subagent, and two planning teammates.",
   "author": { "name": "Silvern-Capital" }
 }

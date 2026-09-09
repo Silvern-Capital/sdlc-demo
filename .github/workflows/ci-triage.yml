@@ -57,9 +57,8 @@ jobs:
             in the working directory. Read it.
 
             The jobs in ci.yml are: tests (node --test tests/*.test.js and
-            node scripts/lint.js), e2e (npm install, npx playwright install
-            chromium, npx playwright test), and qa-test-gap (Claude analysis,
-            pull requests only).
+            node scripts/lint.js) and e2e (npm install, npx playwright install
+            chromium, npx playwright test).
 
             Write a Markdown comment with exactly these sections:
 

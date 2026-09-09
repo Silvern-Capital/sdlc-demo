@@ -104,7 +104,7 @@ function main() {
     "",
     "## Still to come on this PR",
     "",
-    "- [ ] CI: node tests, lint, the Playwright browser suite, the test-gap comment",
+    "- [ ] CI: node tests, lint, the Playwright browser suite",
     "- [ ] Claude code review comment (advice only)",
     "- [ ] /verify screenshot attached by the author",
     "- [ ] A person approves and merges",

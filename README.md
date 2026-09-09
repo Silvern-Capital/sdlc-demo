@@ -37,9 +37,8 @@ Google Chrome you already have.
 - `.claude/skills/eval-outcomes` — grades a finished feature on outcomes with quoted evidence.
 - `.claude/agents/csv-reviewer.md` — a subagent with fresh context, told to find a row where the export disagrees with the data.
 - `.claude/agents/export-builder.md`, `export-reviewer.md` — two teammates that settle the next increment by messaging each other (agent teams; experimental, enabled in `.claude/settings.json`).
-- `.claude/agents/qa-orchestrator.md`, `qa-engineer.md` and the `qa-*` skills — the QA sweep: three subagents on Haiku (API, browser e2e, test gaps), one verdict table. `Use the qa-orchestrator agent to run a full QA sweep.`
 - `beacon-loop-plugin/` — all of the above packaged as a plugin. `/plugin marketplace add ./beacon-loop-plugin` then `/plugin install beacon-loop@beacon-loop`.
-- `.github/workflows/` — `ci.yml` (node tests, lint, browser suite, test-gap comment on PRs), `claude-code-review.yml` (review comment, advice only), `ci-triage.yml` (explains a red run on a PR).
+- `.github/workflows/` — `ci.yml` (node tests, lint, browser suite), `claude-code-review.yml` (review comment, advice only), `ci-triage.yml` (explains a red run on a PR).
 
 Prove the hooks can go red: `bash scripts/check_hooks.sh`.
 
