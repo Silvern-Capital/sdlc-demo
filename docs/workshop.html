@@ -205,7 +205,7 @@ details ul{padding-left:18px;margin:8px 0 4px}
   <div class="meta">
     <span><b>Before you start</b> Node 20+, <code>gh auth status</code>, Chrome installed</span>
     <span><b>How to read the blocks</b> lines starting with <code>!</code> are shell commands: paste them into Claude exactly as shown, Claude Code runs them. Lines marked <em>terminal</em> go in a terminal window, never inside Claude. Everything else is a message to Claude.</span>
-    <span><b>Time</b> 45 minutes, ten steps, five to spare</span>
+    <span><b>Time</b> 45 minutes, nine steps, eight to spare</span>
     <span><b>You will write</b> one goal, two hooks</span>
   </div>
 </header>
@@ -257,13 +257,12 @@ details ul{padding-left:18px;margin:8px 0 4px}
   <a href="#s1"><span class="n">01</span><span class="l">The repo and the ticket</span><span class="m">2 min</span></a>
   <a href="#s2"><span class="n">02</span><span class="l">CLAUDE.md, the note</span><span class="m">3 min</span></a>
   <a href="#s3"><span class="n">03</span><span class="l">Write the finish line</span><span class="m">4 min</span></a>
-  <a href="#s4"><span class="n">04</span><span class="l">Red before the code exists</span><span class="m">3 min</span></a>
-  <a href="#s5"><span class="n">05</span><span class="l">Two hooks</span><span class="m">6 min</span></a>
-  <a href="#s6"><span class="n">06</span><span class="l">Skill, subagent, agent team</span><span class="m">6 min</span></a>
-  <a href="#s7"><span class="n">07</span><span class="l">PR, CI, reviews, worktree</span><span class="m">8 min</span></a>
-  <a href="#s8"><span class="n">08</span><span class="l">/verify</span><span class="m">3 min</span></a>
-  <a href="#s9"><span class="n">09</span><span class="l">Ship it as a plugin</span><span class="m">3 min</span></a>
-  <a href="#s10"><span class="n">10</span><span class="l">Take home</span><span class="m">2 min</span></a>
+  <a href="#s4"><span class="n">04</span><span class="l">Two hooks</span><span class="m">6 min</span></a>
+  <a href="#s5"><span class="n">05</span><span class="l">Skill, subagent, agent team</span><span class="m">6 min</span></a>
+  <a href="#s6"><span class="n">06</span><span class="l">PR, CI, reviews, worktree</span><span class="m">8 min</span></a>
+  <a href="#s7"><span class="n">07</span><span class="l">/verify</span><span class="m">3 min</span></a>
+  <a href="#s8"><span class="n">08</span><span class="l">Ship it as a plugin</span><span class="m">3 min</span></a>
+  <a href="#s9"><span class="n">09</span><span class="l">Take home</span><span class="m">2 min</span></a>
 </div>
 <p class="note">Ten steps in 40 minutes, five minutes slack. Three terminals over the session: A for the server, B for Claude, C for the worktree and the second repo. The goal in step 3 keeps running while you read steps 4 and 5.</p>
 
@@ -320,8 +319,8 @@ no build step. `npm run serve` serves it on :8000 with the API at /api/stores.
 
 ## What done means, for any change
 - A test in tests/ asserts the new behavior. Write it first; watch it fail.
-- Run `node --test tests/*.test.js` after every change; it reports 0 failing.  <span class="ann">← already a hook. You delete this line in step 5.</span>
-- `node scripts/lint.js` reports 0 warnings.   <span class="ann">← already a hook. You delete this line in step 5.</span>
+- Run `node --test tests/*.test.js` after every change; it reports 0 failing.  <span class="ann">← already a hook. You delete this line in step 4.</span>
+- `node scripts/lint.js` reports 0 warnings.   <span class="ann">← already a hook. You delete this line in step 4.</span>
 - Never edit an existing test to make it pass.   <span class="ann">← stays. Step 3 also puts it in the goal.</span>
 - Paste the test and lint output in your final
   message, do not summarize it.
@@ -334,7 +333,7 @@ branches or pull requests for the same feature.</pre></div>
     <div class="do">
       <h3>Then ask Claude</h3>
       <div class="prompt">Read CLAUDE.md. Which of these rules could a program check, and which need a person&#8217;s judgment?</div>
-      <p class="note">Expect: tests, lint, &#8220;never edit a test&#8221; and &#8220;paste the output&#8221; are checkable. The style rules need a person. A rule a program can check should be a check. Step 5 shows two that already are.</p>
+      <p class="note">Expect: tests, lint, &#8220;never edit a test&#8221; and &#8220;paste the output&#8221; are checkable. The style rules need a person. A rule a program can check should be a check. Step 4 shows two that already are.</p>
     </div>
     <div class="see">
       <h3>Why the file is short</h3>
@@ -407,12 +406,12 @@ Do not commit, branch, or push.</div>
   <div class="see" style="margin-top:14px">
     <h3>You should see</h3>
     <ul>
-      <li>Claude starts with the test, not the button.</li>
+      <li>Claude starts with the test, not the button, and shows it failing before the export exists. If that red says &#8220;cannot find module&#8221;, the test crashed before checking anything; ask for the stub. If it is green on the first run, stop and ask why.</li>
       <li>After each turn: <span class="chip fail">not yet met</span> and a reason. Ctrl+O shows it in full:</li>
     </ul>
     <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="red">not yet met</span>  csv.js exports the right header, but the final message
              describes the test run instead of pasting it.</pre></div>
-    <p class="note"><code>/goal</code> on its own shows the condition, turns and spend. Let it run; read steps 4 and 5 while it works.</p>
+    <p class="note"><code>/goal</code> on its own shows the condition, turns and spend. Let it run; read step 4 while it works.</p>
   </div>
   <div class="see" style="margin-top:14px">
     <h3>Good to know: the same review as a hook</h3>
@@ -423,39 +422,9 @@ Do not commit, branch, or push.</div>
 </section>
 
 <!-- ============================================================ 04 -->
+<!-- ============================================================ 04 -->
 <section class="step" id="s4">
-  <div class="step-meta"><span class="num">STEP 04</span><span class="ep">tests first</span><span class="min">3 min</span></div>
-  <h2>Watch the test fail before the code exists.</h2>
-  <p class="idea">A test that has only ever passed proves nothing. Maybe it checks the export; maybe it checks nothing and passes anyway. So the goal makes Claude do it in this order: write the test, write a fake export that returns nothing, run the test, show you the failure. Then write the real thing.</p>
-  <div class="two even">
-    <div>
-      <h3>What to watch for in Claude&#8217;s output</h3>
-      <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre>$ node --test tests/*.test.js
-
-<span class="red">not ok 1</span> - toCsv matches window.STORES
-    Expected values to be strictly deep-equal:
-    <span class="red">+ undefined</span>
-    - [ 'id', 'name', 'region', 'fillRate', ...
-ok 2 - data.js exposes six sites with valid statuses
-ok 3 - site ids are unique
-# tests 3  # pass 2  <span class="red"># fail 1</span></pre></div>
-      <p class="note">The new test red, the two old ones green. Claude may write more than one case, so the counts will differ; the red line is what matters: what the test expected (a header row) and what it got (nothing).</p>
-    </div>
-    <div>
-      <h3>Two reds, only one counts</h3>
-      <ul>
-        <li><b>&#8220;Cannot find module csv.js&#8221;</b>: the test crashed before it checked anything. Proves nothing. If you see this, ask Claude for the stub.</li>
-        <li><b>&#8220;Expected a header row, got undefined&#8221;</b>: the test ran, compared, and caught a wrong answer. This is the one you want.</li>
-        <li><b>Green on the first run</b>: stop and ask why. A test that cannot fail is not a test.</li>
-      </ul>
-      <div class="check"><b>checkpoint</b><span>You saw the test fail on a wrong answer before the real export existed. From here on, its green means something.</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================ 05 -->
-<section class="step" id="s5">
-  <div class="step-meta"><span class="num">STEP 05</span><span class="ep">hooks</span><span class="min">6 min</span></div>
+  <div class="step-meta"><span class="num">STEP 04</span><span class="ep">hooks</span><span class="min">6 min</span></div>
   <h2>Two of those rules are already hooks. Delete them from the note together.</h2>
   <p class="idea">While the goal ran, the tests ran after every edit and again when Claude said done. Not because the note asked. Two hooks did it: small programs Claude Code runs at a fixed point, whether Claude remembers or not.</p>
   <figure>
@@ -527,10 +496,10 @@ red?  print it     exit 2  (Claude sees it)</pre></div>
   <p class="note">Not a hook: a script Claude Code runs after every message and prints. Zero tokens. The dollar figure is an estimate at list price. Watch the percentage climb as Claude reads test output, and the dollars jump when a subagent runs.</p>
 </section>
 
-<!-- ============================================================ 06 -->
-<!-- ============================================================ 06 -->
-<section class="step" id="s6">
-  <div class="step-meta"><span class="num">STEP 06</span><span class="ep">skill</span><span class="ep">subagent</span><span class="ep">agent team</span><span class="min">6 min</span></div>
+<!-- ============================================================ 05 -->
+<!-- ============================================================ 05 -->
+<section class="step" id="s5">
+  <div class="step-meta"><span class="num">STEP 05</span><span class="ep">skill</span><span class="ep">subagent</span><span class="ep">agent team</span><span class="min">6 min</span></div>
   <h2>Same check, three places to run it.</h2>
   <p class="idea">A skill runs in your session. A subagent runs in its own context and hands back a verdict. A team gives the test and the code different owners.</p>
   <figure>
@@ -600,19 +569,19 @@ red?  print it     exit 2  (Claude sees it)</pre></div>
   </figure>
   <div class="cards three">
     <div class="card">
-      <span class="k">6a &#183; skill &#183; 1 min</span>
+      <span class="k">5a &#183; skill &#183; 1 min</span>
       <h4>A checklist, run by you</h4>
       <div class="prompt slash">/pr-ready</div>
-      <p>What an engineer checks before a PR: tests, coverage, lint, only the allowed files changed, a PR description with the evidence pasted. READY or NOT READY. It is Claude grading its own work. It will flag CLAUDE.md in the diff: that is your step 5 edit, expected.</p>
+      <p>What an engineer checks before a PR: tests, coverage, lint, only the allowed files changed, a PR description with the evidence pasted. READY or NOT READY. It is Claude grading its own work. It will flag CLAUDE.md in the diff: that is your step 4 edit, expected.</p>
     </div>
     <div class="card purple">
-      <span class="k">6b &#183; subagent &#183; 2 min</span>
+      <span class="k">5b &#183; subagent &#183; 2 min</span>
       <h4>QA: the cases nobody wrote a test for</h4>
       <div class="prompt">Use the qa agent on the CSV export: finance will open it in Excel.</div>
       <p>Fresh context, read-only tools, never saw the conversation. It reads the tests to learn what is already proven, then does what they cannot: opens the file the way finance will, tries a quote in a name, a decimal, an empty fleet, the middle dot in a region, and compares with the live API. What comes back is findings: repro, expected versus actual, and the test that would have caught it. In rehearsal it found the one thing six green tests missed: no UTF-8 byte-order mark, so Excel shows the em dash and middle dot as garbage in every row. The goal in step 3 requires no blocking findings, so Claude fixes it and QA runs again.</p>
     </div>
     <div class="card purple">
-      <span class="k">6c &#183; agent team &#183; 3 min</span>
+      <span class="k">5c &#183; agent team &#183; 3 min</span>
       <h4>The test and the code have different owners</h4>
       <p>Finance wants one more column. Two roles any team has: the tester (haiku: one assertion at a time) owns the tests and writes the failing one first; the builder (sonnet) owns the app code and fixes only what the tester sent.</p>
       <div class="prompt">Spawn two teammates: one using the tester agent type,
@@ -628,9 +597,9 @@ Only csv.js and tests/csv.test.js may change.</div>
   </div>
 </section>
 
-<!-- ============================================================ 07 -->
-<section class="step" id="s7">
-  <div class="step-meta"><span class="num">STEP 07</span><span class="ep">PR</span><span class="ep">/loop</span><span class="ep">reviews</span><span class="ep">worktree</span><span class="min">8 min</span></div>
+<!-- ============================================================ 06 -->
+<section class="step" id="s6">
+  <div class="step-meta"><span class="num">STEP 06</span><span class="ep">PR</span><span class="ep">/loop</span><span class="ep">reviews</span><span class="ep">worktree</span><span class="min">8 min</span></div>
   <h2>Open the PR. Use the wait. Start the next ticket.</h2>
   <p class="idea">A real pull request. CI runs the suite on a clean machine, which takes minutes. A red check goes to Claude, not to you, and you use the wait.</p>
   <figure>
@@ -705,14 +674,14 @@ When every check is green, report it and stop.</div>
         <li>Two reports land while you wait: code review findings, and a security folder with patches it never applies for you. On the PR itself, <code>claude-review</code> posts a verdict too; in rehearsal it asked for the CLAUDE.md edit to be reverted, which is the right call.</li>
         <li><code>claude agents</code>: every session on one screen. Nobody merges here; that is you, on GitHub.</li>
       </ul>
-      <div class="check"><b>checkpoint</b><span>You installed a plugin with one command. Step 9 is you shipping your own the same way.</span></div>
+      <div class="check"><b>checkpoint</b><span>You installed a plugin with one command. Step 8 is you shipping your own the same way.</span></div>
     </div>
   </div>
 </section>
 
-<!-- ============================================================ 08 -->
-<section class="step" id="s8">
-  <div class="step-meta"><span class="num">STEP 08</span><span class="ep">/verify</span><span class="min">3 min</span></div>
+<!-- ============================================================ 07 -->
+<section class="step" id="s7">
+  <div class="step-meta"><span class="num">STEP 07</span><span class="ep">/verify</span><span class="min">3 min</span></div>
   <h2>Tests pass. Now click the button the way finance will.</h2>
   <p class="idea">The test proved the text is right. Nobody has clicked the button. <code>/verify</code> drives the real app in a browser, downloads the file, and compares it with the API.</p>
   <div class="two verify">
@@ -736,9 +705,9 @@ Austin fillRate   <span class="grn">84.7</span>  card 84.7%  api 84.7
   </div>
 </section>
 
-<!-- ============================================================ 09 -->
-<section class="step" id="s9">
-  <div class="step-meta"><span class="num">STEP 09</span><span class="ep">plugin</span><span class="min">3 min</span></div>
+<!-- ============================================================ 08 -->
+<section class="step" id="s8">
+  <div class="step-meta"><span class="num">STEP 08</span><span class="ep">plugin</span><span class="min">3 min</span></div>
   <h2>Everything you turned on is a file. Ship the files.</h2>
   <p class="idea">Three hooks, one skill, three agents, one manifest. The next repo and the next person get the same checks with one install.</p>
   <div class="two">
@@ -772,9 +741,9 @@ beacon-loop-plugin/agents/builder.md</pre></div>
   </div>
 </section>
 
-<!-- ============================================================ 10 -->
-<section class="step" id="s10">
-  <div class="step-meta"><span class="num">STEP 10</span><span class="ep">wrap up</span><span class="min">2 min</span></div>
+<!-- ============================================================ 09 -->
+<section class="step" id="s9">
+  <div class="step-meta"><span class="num">STEP 09</span><span class="ep">wrap up</span><span class="min">2 min</span></div>
   <h2>What you take home.</h2>
   <div class="take">
     <div><div class="n">01</div><h4>Put the check where Claude cannot skip it.</h4><p>Write done as something a program can check. Put it in a goal or a hook. Red goes to Claude, not to you.</p></div>
