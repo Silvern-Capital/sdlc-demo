@@ -1,11 +1,13 @@
-# Claude code review: Claude reads every pull request and leaves comments.
+# claude-review: Claude reads every pull request and leaves comments. The
+# "claude-" prefix marks the checks that are AI; ci / tests and ci / e2e
+# are plain scripts.
 #
 # Claude is a reviewer, not an approver. Branch protection decides who can
 # approve, and that stays a person. Claude's comments are advice for the
 # human reviewer. Uses claude-code-action@v1 and the ANTHROPIC_API_KEY
 # repo secret.
 
-name: claude-code-review
+name: claude-review
 
 on:
   pull_request:
@@ -30,7 +32,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Claude code review
+      - name: Claude review (AI, advice only)
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
