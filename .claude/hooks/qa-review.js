@@ -81,20 +81,24 @@ function markReviewed() {
 
 // A fixed instruction. The agent finds the changed files itself with git
 // status, so nothing from the working tree is interpolated into the prompt.
-var prompt = "Review the current working-tree diff of this repo as QA. Run git status to see what changed. " +
-  "Use the running API on localhost:8000 if it answers, otherwise read data.js. " +
+var prompt = "Review the current working-tree diff of this repo as QA. In this run you have no node -e and no curl; " +
+  "use `node scripts/qa-query.js <command>` instead: status, diff, sites, api, csv [file], bytes [file], tests. " +
+  "For a custom case, pass a JSON array of sites on stdin: printf '[...]' | node scripts/qa-query.js csv -. " +
   "Report findings the way your instructions say and end with the closing line.";
-// Only what the qa agent needs: read the tree, run node one-liners and the
-// tests, look at the diff, and curl the local API. No bare Bash.
+// No interpreter and no open network for the review run. Everything the qa
+// agent needs goes through one fixed script (scripts/qa-query.js: status,
+// diff, sites, api, csv over any input, bytes, tests) plus the test runner
+// pinned to the tests folder.
 var ALLOWED_TOOLS = [
   "Read", "Grep", "Glob",
-  "Bash(node:*)", "Bash(git diff:*)", "Bash(git status:*)",
-  "Bash(curl -sf http://localhost:8000/*)", "Bash(curl -s http://localhost:8000/*)",
-  "Bash(curl -sf localhost:8000/*)", "Bash(curl -s localhost:8000/*)"
+  "Bash(node scripts/qa-query.js:*)",
+  "Bash(node --test tests/*)"
 ].join(",");
 var args = ["-p", "--agent", "qa", "--allowedTools", ALLOWED_TOOLS, "--max-turns", "25", "--output-format", "text", prompt];
 // A minimal environment for the child: enough to find claude and sign in,
-// nothing else from this process.
+// nothing else from this process. The auth variables are forwarded because
+// this user signs in with them; with no interpreter and no network in the
+// allowlist, the review run has no way to send them anywhere.
 var childEnv = { BEACON_QA_STOP: "" };
 ["PATH", "HOME", "USER", "LANG", "TMPDIR", "SHELL", "ANTHROPIC_API_KEY", "CLAUDE_CONFIG_DIR", "ANTHROPIC_BASE_URL", "CLAUDE_CODE_OAUTH_TOKEN"]
   .forEach(function (k) { if (process.env[k] !== undefined) childEnv[k] = process.env[k]; });
