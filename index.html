@@ -102,10 +102,9 @@
   .legend .l-down{background:var(--down);}
 
   /* Site search */
-  .searchrow{margin:0 2px 14px;}
+  .searchrow{display:flex;gap:10px;margin:0 2px 14px;}
+  #status-filter,
   #store-search{
-    width:100%;
-    max-width:360px;
     padding:9px 12px;
     font-size:13px;
     font-family:inherit;
@@ -114,6 +113,9 @@
     border:1px solid var(--card-border);
     border-radius:8px;
   }
+  #status-filter{flex:none;padding-right:8px;cursor:pointer;}
+  #store-search{width:100%;max-width:360px;}
+  #status-filter:focus,
   #store-search:focus{
     outline:none;
     border-color:var(--brand);
@@ -204,6 +206,12 @@
       </div>
     </div>
     <div class="searchrow">
+      <select id="status-filter" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="ok">Operational</option>
+        <option value="warn">Degraded</option>
+        <option value="down">Down</option>
+      </select>
       <input id="store-search" type="text" placeholder="Filter by site name or region…" aria-label="Filter sites by name or region">
     </div>
     <section class="grid" id="grid"></section>
@@ -285,16 +293,27 @@
       });
     }
 
+    var STATUS_RANK = { ok: 0, warn: 1, down: 2 };
+
+    function siteStatus(s){
+      return STATUS_RANK[s.netStatus] > STATUS_RANK[s.posStatus] ? s.netStatus : s.posStatus;
+    }
+
     function initSearch(){
       var input = document.getElementById("store-search");
-      input.addEventListener("input", function(){
+      var select = document.getElementById("status-filter");
+      function applyFilters(){
         var q = input.value.trim().toLowerCase();
+        var status = select.value;
         var cards = document.querySelectorAll("#grid .card");
         window.STORES.forEach(function(s, i){
           var hay = (s.name + " " + s.region).toLowerCase();
-          cards[i].style.display = (q === "" || hay.indexOf(q) !== -1) ? "" : "none";
+          var match = (q === "" || hay.indexOf(q) !== -1) && (status === "" || siteStatus(s) === status);
+          cards[i].style.display = match ? "" : "none";
         });
-      });
+      }
+      input.addEventListener("input", applyFilters);
+      select.addEventListener("change", applyFilters);
     }
 
     function renderMeta(){
